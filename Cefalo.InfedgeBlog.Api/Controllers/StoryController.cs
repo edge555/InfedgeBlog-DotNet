@@ -13,9 +13,22 @@ namespace Cefalo.InfedgeBlog.Api.Controllers
         {
             _storyService = storyService;
         }
-
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Story>>> GetStoriesAsync()
+        {
+            return Ok(await _storyService.GetStoriesAsync());
+        }
+        [HttpGet("{Id}")]
+        public async Task<IActionResult> GetStory(int Id)
+        {
+            var story = await _storyService.GetStoryByIdAsync(Id);
+            if (story == null) { 
+                return BadRequest("Story not found"); 
+            }
+            return Ok(story);
+        }
         [HttpPost]
-        public async Task<IActionResult> PostStoryAsync(Story story)
+        public async Task<IActionResult> PostStoryAsync([FromBody] Story story)
         {
             var storyDtoObj = await _storyService.PostStoryAsync(story);
             return Created("", storyDtoObj);

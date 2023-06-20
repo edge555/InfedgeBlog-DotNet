@@ -12,7 +12,16 @@ namespace Cefalo.InfedgeBlog.Service.Services
         {
             _storyRepository = storyRepository;
         }
-            
+
+        public async Task<List<Story>> GetStoriesAsync()
+        {
+            return await _storyRepository.GetStoriesAsync();
+        }
+        public async Task<Story> GetStoryByIdAsync(int Id)
+        {
+            return await _storyRepository.GetStoryByIdAsync(Id);
+        }
+
         public async Task<StoryDto> PostStoryAsync(Story story)
         {
         Story newStory = await _storyRepository.PostStoryAsync(story);
