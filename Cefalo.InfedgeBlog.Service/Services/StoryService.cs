@@ -12,7 +12,6 @@ namespace Cefalo.InfedgeBlog.Service.Services
         {
             _storyRepository = storyRepository;
         }
-
         public async Task<List<Story>> GetStoriesAsync()
         {
             return await _storyRepository.GetStoriesAsync();
@@ -21,10 +20,9 @@ namespace Cefalo.InfedgeBlog.Service.Services
         {
             return await _storyRepository.GetStoryByIdAsync(Id);
         }
-
         public async Task<StoryDto> PostStoryAsync(Story story)
         {
-        Story newStory = await _storyRepository.PostStoryAsync(story);
+            Story newStory = await _storyRepository.PostStoryAsync(story);
             var storyDto = new StoryDto
             {
                 Id = newStory.Id,
@@ -34,6 +32,21 @@ namespace Cefalo.InfedgeBlog.Service.Services
             };
             return storyDto;
         }
-
+        public async Task<StoryDto> UpdateStoryAsync(int Id, Story story)
+        {
+            var storyData = await _storyRepository.UpdateStoryAsync(Id, story);
+            if (storyData == null)
+            {
+                return null;
+            }
+            var storyDto = new StoryDto
+            {
+                Id = storyData.Id,
+                Title = storyData.Title,
+                Body = storyData.Body,
+                PublishedDate = storyData.PublishedDate
+            };
+            return storyDto;
+        }
     }
 }

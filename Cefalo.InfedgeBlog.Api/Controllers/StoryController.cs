@@ -22,7 +22,8 @@ namespace Cefalo.InfedgeBlog.Api.Controllers
         public async Task<IActionResult> GetStory(int Id)
         {
             var story = await _storyService.GetStoryByIdAsync(Id);
-            if (story == null) { 
+            if (story == null) 
+            { 
                 return BadRequest("Story not found"); 
             }
             return Ok(story);
@@ -30,8 +31,18 @@ namespace Cefalo.InfedgeBlog.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> PostStoryAsync([FromBody] Story story)
         {
-            var storyDtoObj = await _storyService.PostStoryAsync(story);
-            return Created("", storyDtoObj);
+            var storyDto = await _storyService.PostStoryAsync(story);
+            return Created("", storyDto);
+        }
+        [HttpPut("{Id}")]
+        public async Task<IActionResult> UpdateStoryAsync(int Id, [FromBody] Story story)
+        {
+            var storyDto = await _storyService.UpdateStoryAsync(Id, story);
+            if (storyDto == null)
+            {
+                return BadRequest("Story not found");
+            }
+            return Ok(storyDto);
         }
     }
 }

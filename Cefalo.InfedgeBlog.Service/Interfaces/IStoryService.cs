@@ -8,5 +8,6 @@ namespace Cefalo.InfedgeBlog.Service.Interfaces
         Task<List<Story>> GetStoriesAsync();
         Task<Story> GetStoryByIdAsync(int Id);
         Task<StoryDto> PostStoryAsync(Story Story);
+        Task<StoryDto> UpdateStoryAsync(int Id, Story story);
     }
 }
