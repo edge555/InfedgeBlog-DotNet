@@ -31,9 +31,6 @@ namespace Cefalo.InfedgeBlog.Repository.Repositories
         public async Task<Story> UpdateStoryAsync(int Id, Story story)
         {
             var storyData = await _dbcontext.Stories.FindAsync(Id);
-            if (storyData == null) { 
-                return null; 
-            }
             storyData.Title = story.Title;
             storyData.Body = story.Body;
             await _dbcontext.SaveChangesAsync();
