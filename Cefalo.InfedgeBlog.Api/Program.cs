@@ -5,20 +5,10 @@ using Cefalo.InfedgeBlog.Service.Interfaces;
 using Cefalo.InfedgeBlog.Service.Services;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.EntityFrameworkCore;
-using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
-builder.Services.AddControllers();
-
-// Configure services
-builder.Services.AddControllers(options =>
-{
-    // Configure XML output formatter
-    options.OutputFormatters.Add(new XmlSerializerOutputFormatter());
-});
+builder.Services.AddControllers().AddXmlSerializerFormatters();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
