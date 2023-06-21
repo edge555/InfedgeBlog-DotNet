@@ -1,10 +1,8 @@
 ﻿using Cefalo.InfedgeBlog.Database.Model;
-using Cefalo.InfedgeBlog.Service.Dtos;
-
 namespace Cefalo.InfedgeBlog.Service.Interfaces
 {
     public interface IStoryService
     {
-        Task<StoryDto> PostStoryAsync(Story Story);
+        Task<Story> PostStoryAsync(Story Story);
     }
 }
