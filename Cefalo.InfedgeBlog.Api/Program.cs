@@ -1,10 +1,24 @@
+using Cefalo.InfedgeBlog.Database.Context;
+using Cefalo.InfedgeBlog.Repository.Interfaces;
+using Cefalo.InfedgeBlog.Repository.Repositories;
+using Cefalo.InfedgeBlog.Service.Interfaces;
+using Cefalo.InfedgeBlog.Service.Services;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddScoped<IStoryRepository, StoryRepository>();
+builder.Services.AddScoped<IStoryService, StoryService>();
 
 var app = builder.Build();
 
