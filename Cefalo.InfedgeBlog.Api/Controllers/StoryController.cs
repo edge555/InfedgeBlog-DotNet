@@ -1,6 +1,6 @@
 ﻿using Cefalo.InfedgeBlog.Database.Model;
+using Cefalo.InfedgeBlog.Service.Dtos;
 using Cefalo.InfedgeBlog.Service.Interfaces;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cefalo.InfedgeBlog.Api.Controllers
@@ -23,32 +23,24 @@ namespace Cefalo.InfedgeBlog.Api.Controllers
         public async Task<IActionResult> GetStory(int Id)
         {
             var story = await _storyService.GetStoryByIdAsync(Id);
-            if (story == null) 
-            { 
-                return BadRequest("Story not found"); 
-            }
             return Ok(story);
         }
         [HttpPost]
-        public async Task<IActionResult> PostStoryAsync([FromBody] Story story)
+        public async Task<IActionResult> PostStoryAsync([FromBody] StoryPostDto storyPostDto)
         {
-            var storyDto = await _storyService.PostStoryAsync(story);
+            var storyDto = await _storyService.PostStoryAsync(storyPostDto);
             return Created("", storyDto);
         }
         [HttpPut("{Id}")]
-        public async Task<IActionResult> UpdateStoryAsync(int Id, [FromBody] Story story)
+        public async Task<IActionResult> UpdateStoryAsync(int Id, [FromBody] StoryUpdateDto storyUpdateDto)
         {
-            var storyDto = await _storyService.UpdateStoryAsync(Id, story);
-            if (storyDto == null)
-            {
-                return BadRequest("Story not found");
-            }
+            var storyDto = await _storyService.UpdateStoryAsync(Id, storyUpdateDto);
             return Ok(storyDto);
         }
         [HttpDelete("{Id}")]
         public async Task<IActionResult> DeleteStoryByIdAsync(int Id)
         {
-            var deleted = await _storyService.DeleteStoryByIdAsync(Id);
+            await _storyService.DeleteStoryByIdAsync(Id);
             return NoContent();
         }
     }

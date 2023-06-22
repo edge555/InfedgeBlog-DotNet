@@ -23,11 +23,10 @@ namespace Cefalo.InfedgeBlog.Repository.Repositories
         }
         public async Task<Story> PostStoryAsync(Story story)
         {
-            _dbcontext.Stories.Add(story);
+            var newStory = _dbcontext.Stories.Add(story);
             await _dbcontext.SaveChangesAsync();
-            return story;
+            return newStory.Entity;
         }
-
         public async Task<Story> UpdateStoryAsync(int Id, Story story)
         {
             var storyData = await _dbcontext.Stories.FindAsync(Id);
