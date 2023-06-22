@@ -1,5 +1,6 @@
 ﻿using Cefalo.InfedgeBlog.Database.Model;
 using Cefalo.InfedgeBlog.Service.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cefalo.InfedgeBlog.Api.Controllers
@@ -43,6 +44,12 @@ namespace Cefalo.InfedgeBlog.Api.Controllers
                 return BadRequest("Story not found");
             }
             return Ok(storyDto);
+        }
+        [HttpDelete("{Id}")]
+        public async Task<IActionResult> DeleteStoryByIdAsync(int Id)
+        {
+            var deleted = await _storyService.DeleteStoryByIdAsync(Id);
+            return NoContent();
         }
     }
 }

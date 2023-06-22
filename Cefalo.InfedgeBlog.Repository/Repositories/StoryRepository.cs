@@ -36,6 +36,12 @@ namespace Cefalo.InfedgeBlog.Repository.Repositories
             await _dbcontext.SaveChangesAsync();
             return storyData;
         }
-        
+        public async Task<Boolean> DeleteStoryByIdAsync(int Id)
+        {
+            var story = await _dbcontext.Stories.FindAsync(Id);
+            _dbcontext.Stories.Remove(story);
+            await _dbcontext.SaveChangesAsync();
+            return true;
+        }
     }
 }

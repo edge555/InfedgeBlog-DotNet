@@ -1,5 +1,6 @@
 ﻿using Cefalo.InfedgeBlog.Database.Model;
 using Cefalo.InfedgeBlog.Repository.Interfaces;
+using Cefalo.InfedgeBlog.Service.CustomExceptions;
 using Cefalo.InfedgeBlog.Service.Dtos;
 using Cefalo.InfedgeBlog.Service.Interfaces;
 
@@ -30,6 +31,15 @@ namespace Cefalo.InfedgeBlog.Service.Services
         {
             var storyData = await _storyRepository.UpdateStoryAsync(Id, story);
             return storyData;
+        }
+        public async Task<bool> DeleteStoryByIdAsync(int Id)
+        {
+            var storyData = await _storyRepository.GetStoryByIdAsync(Id);
+            if (storyData == null)
+            {
+                throw new NotFoundException("No story found with this id");
+            }
+            return await _storyRepository.DeleteStoryByIdAsync(Id);
         }
     }
 }
