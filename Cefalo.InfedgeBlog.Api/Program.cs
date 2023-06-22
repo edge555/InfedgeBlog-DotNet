@@ -3,12 +3,14 @@ using Cefalo.InfedgeBlog.Repository.Interfaces;
 using Cefalo.InfedgeBlog.Repository.Repositories;
 using Cefalo.InfedgeBlog.Service.Interfaces;
 using Cefalo.InfedgeBlog.Service.Services;
-using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers().AddXmlSerializerFormatters();
+
+// Automapper
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {

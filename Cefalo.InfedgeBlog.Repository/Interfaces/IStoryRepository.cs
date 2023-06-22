@@ -8,5 +8,6 @@ namespace Cefalo.InfedgeBlog.Repository.Interfaces
         Task<Story> GetStoryByIdAsync(int Id);
         Task<Story> PostStoryAsync(Story story);
         Task<Story> UpdateStoryAsync(int Id, Story story);
+        Task<Boolean> DeleteStoryByIdAsync(int Id);
     }
 }
