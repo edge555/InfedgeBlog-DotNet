@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Cefalo.InfedgeBlog.Database.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace Cefalo.InfedgeBlog.Database.Model
 {
@@ -11,5 +12,7 @@ namespace Cefalo.InfedgeBlog.Database.Model
         [Required]
         public string Body { get; set; }
         public DateTime PublishedDate { get; set; } = DateTime.Now;
+        public int UserId { get; set; }  
+        public User User { get; set; }
     }
 }
