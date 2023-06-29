@@ -1,4 +1,5 @@
 ﻿using Cefalo.InfedgeBlog.Database.Models;
+using Cefalo.InfedgeBlog.Service.Dtos;
 using Cefalo.InfedgeBlog.Service.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -25,13 +26,13 @@ namespace Cefalo.InfedgeBlog.Api.Controllers
             return Ok(user);
         }
         [HttpPost]
-        public async Task<IActionResult> PostUserAsync([FromBody] User userPostDto)
+        public async Task<IActionResult> PostUserAsync([FromBody] UserPostDto userPostDto)
         {
             var userDto = await _userService.PostUserAsync(userPostDto);
             return Created("", userDto);
         }
         [HttpPut("{Id}")]
-        public async Task<IActionResult> UpdateUserByIdAsync(int Id, [FromBody] User userUpdateDto)
+        public async Task<IActionResult> UpdateUserByIdAsync(int Id, [FromBody] UserUpdateDto userUpdateDto)
         {
             var userDto = await _userService.UpdateUserByIdAsync(Id, userUpdateDto);
             return Ok(userDto);

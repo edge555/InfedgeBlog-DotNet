@@ -35,6 +35,7 @@ namespace Cefalo.InfedgeBlog.Service.Services
         public async Task<StoryDto> PostStoryAsync(StoryPostDto storyPostDto)
         {
             Story storyData = _mapper.Map<Story>(storyPostDto);
+            storyData.UserId = 1; // delete later
             var newStory = await _storyRepository.PostStoryAsync(storyData);
             var storyDto = _mapper.Map<StoryDto>(newStory);
             return storyDto;
