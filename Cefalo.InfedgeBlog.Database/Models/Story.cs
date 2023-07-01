@@ -11,8 +11,11 @@ namespace Cefalo.InfedgeBlog.Database.Model
         public string Title { get; set; }
         [Required]
         public string Body { get; set; }
-        public DateTime PublishedDate { get; set; } = DateTime.Now;
-        public int UserId { get; set; }  
-        public User User { get; set; }
+        [Required]
+        public int AuthorId { get; set; }  
+        public User Author { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
     }
 }
+
