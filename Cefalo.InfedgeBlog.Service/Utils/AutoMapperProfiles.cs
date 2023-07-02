@@ -14,8 +14,11 @@ namespace Cefalo.InfedgeBlog.Service.Utils
             CreateMap<StoryUpdateDto, Story>();
 
             CreateMap<User, UserDto>().ReverseMap();
+            CreateMap<SignupDto, User>();
+            CreateMap<LoginDto, User>();
             CreateMap<UserPostDto, User>();
             CreateMap<UserUpdateDto, User>();
+
         }
     }
 }

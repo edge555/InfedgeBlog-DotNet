@@ -23,7 +23,12 @@ namespace Cefalo.InfedgeBlog.Repository.Repositories
         }
         public async Task<User> GetUserByUsernameAsync(string Username)
         {
-            var user = await _dbcontext.Users.FindAsync(Username);
+            var user = await _dbcontext.Users.FirstOrDefaultAsync(u => u.Username == Username);
+            return user;
+        }
+        public async Task<User> GetUserByEmailAsync(string Email)
+        {
+            var user = await _dbcontext.Users.FirstOrDefaultAsync(u => u.Email == Email);
             return user;
         }
         public async Task<User> PostUserAsync(User user)

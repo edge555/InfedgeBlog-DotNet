@@ -7,6 +7,7 @@ namespace Cefalo.InfedgeBlog.Repository.Interfaces
         Task<List<User>> GetUsersAsync();
         Task<User> GetUserByIdAsync(int Id);
         Task<User> GetUserByUsernameAsync(string username);
+        Task<User> GetUserByEmailAsync(string email);
         Task<User> PostUserAsync(User user);
         Task<User> UpdateUserByIdAsync(int Id, User user);
         Task<Boolean> DeleteUserByIdAsync(int Id);

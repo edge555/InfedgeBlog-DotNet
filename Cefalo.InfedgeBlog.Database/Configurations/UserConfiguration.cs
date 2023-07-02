@@ -35,6 +35,9 @@ namespace Cefalo.InfedgeBlog.Database.Configurations
             builder.HasMany(u => u.Stories)
                 .WithOne(s => s.Author)
                 .HasForeignKey(s => s.AuthorId);
+
+            builder.HasIndex(u => u.Username).IsUnique();
+            builder.HasIndex(u => u.Email).IsUnique();
         }
     }
 }
