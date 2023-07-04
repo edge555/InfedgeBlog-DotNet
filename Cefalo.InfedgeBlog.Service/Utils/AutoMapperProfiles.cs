@@ -18,7 +18,7 @@ namespace Cefalo.InfedgeBlog.Service.Utils
             CreateMap<LoginDto, User>();
             CreateMap<UserPostDto, User>();
             CreateMap<UserUpdateDto, User>();
-
+            CreateMap<User, UserWithTokenDto>();
         }
     }
 }

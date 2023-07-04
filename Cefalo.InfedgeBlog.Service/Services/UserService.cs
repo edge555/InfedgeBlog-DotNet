@@ -10,10 +10,12 @@ namespace Cefalo.InfedgeBlog.Service.Services
     {
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
-        public UserService(IUserRepository userRepository, IMapper mapper)
+        private readonly IAuthService _authService;
+        public UserService(IUserRepository userRepository, IMapper mapper, IAuthService authService)
         {
             _userRepository = userRepository;
             _mapper = mapper;
+            _authService = authService;
         }
         public async Task<IEnumerable<UserDto>> GetUsersAsync()
         {

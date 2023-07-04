@@ -1,5 +1,6 @@
 ﻿using Cefalo.InfedgeBlog.Service.Dtos;
 using Cefalo.InfedgeBlog.Service.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cefalo.InfedgeBlog.Api.Controllers
@@ -19,9 +20,29 @@ namespace Cefalo.InfedgeBlog.Api.Controllers
         [Route("Signup")]
         public async Task<ActionResult<UserDto>> SignupAsync(SignupDto request)
         {
-            var user = await _authService.SignupAsync(request);
-            return Created(nameof(SignupAsync),user);
+            var userDto = await _authService.SignupAsync(request);
+            if(userDto == null) 
+            {
+                return BadRequest("Can not signup");
+            }
+            return Created(nameof(SignupAsync), userDto);
         }
-
+        [HttpPost]
+        [Route("Login")]
+        public async Task<ActionResult<UserWithTokenDto>>LoginAsync(LoginDto request)
+        {
+            var userWithToken = await _authService.LoginAsync(request);
+            if (userWithToken == null)
+            {
+                return BadRequest("Can not login");
+            }
+            return Ok(userWithToken);
+        }
+        [HttpGet, Authorize]
+        public ActionResult<int> GetLoggedInUserId()
+        {
+            var userId = _authService.GetLoggedInUserId();
+            return Ok(userId);
+        }
     }
 }

@@ -11,10 +11,12 @@ namespace Cefalo.InfedgeBlog.Service.Services
     {
         private readonly IStoryRepository _storyRepository;
         private readonly IMapper _mapper;
-        public StoryService(IStoryRepository storyRepository, IMapper mapper)
+        private readonly IAuthService _authService;
+        public StoryService(IStoryRepository storyRepository, IMapper mapper, IAuthService authService)
         {
             _storyRepository = storyRepository;
             _mapper = mapper;
+            _authService = authService;
         }
         public async Task<IEnumerable<StoryDto>> GetStoriesAsync()
         {
@@ -34,9 +36,8 @@ namespace Cefalo.InfedgeBlog.Service.Services
         }
         public async Task<StoryDto> PostStoryAsync(StoryPostDto storyPostDto)
         {
-            var UserId = 2; // delete later
             Story storyData = _mapper.Map<Story>(storyPostDto);
-            storyData.AuthorId = UserId;
+            storyData.AuthorId = _authService.GetLoggedInUserId();
             var newStory = await _storyRepository.PostStoryAsync(storyData);
             var storyDto = _mapper.Map<StoryDto>(newStory);
             return storyDto;

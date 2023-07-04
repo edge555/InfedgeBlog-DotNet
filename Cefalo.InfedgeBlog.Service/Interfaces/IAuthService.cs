@@ -5,6 +5,7 @@ namespace Cefalo.InfedgeBlog.Service.Interfaces
     public interface IAuthService
     {
         Task<UserDto> SignupAsync(SignupDto request);
-        Task<UserDto> LoginAsync(LoginDto request);
+        Task<UserWithTokenDto> LoginAsync(LoginDto request);
+        int GetLoggedInUserId();
     }
 }
