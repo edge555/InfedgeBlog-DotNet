@@ -52,6 +52,11 @@ namespace Cefalo.InfedgeBlog.Service.Services
         }
         public async Task<UserDto> UpdateUserByIdAsync(int Id, UserUpdateDto userUpdateDto)
         {
+            var loggedInUserId = _authService.GetLoggedInUserId();
+            if (loggedInUserId != Id)
+            {
+                throw new UnauthorizedException("You are not authorized to perform this action.");
+            }
             var user = await _userRepository.GetUserByIdAsync(Id);
             if (user == null)
             {
@@ -64,6 +69,11 @@ namespace Cefalo.InfedgeBlog.Service.Services
         }
         public async Task<Boolean> DeleteUserByIdAsync(int Id)
         {
+            var loggedInUserId = _authService.GetLoggedInUserId();
+            if (loggedInUserId != Id)
+            {
+                throw new UnauthorizedException("You are not authorized to perform this action.");
+            }
             var user = await _userRepository.GetUserByIdAsync(Id);
             if (user == null)
             {

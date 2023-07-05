@@ -4,7 +4,6 @@ using Cefalo.InfedgeBlog.Repository.Interfaces;
 using Cefalo.InfedgeBlog.Service.CustomExceptions;
 using Cefalo.InfedgeBlog.Service.Dtos;
 using Cefalo.InfedgeBlog.Service.Interfaces;
-using Cefalo.InfedgeBlog.Service.Utils;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
 
@@ -65,15 +64,19 @@ namespace Cefalo.InfedgeBlog.Service.Services
             userData.Token = token;
             return userData;
         }
+        public void LogoutAsync()
+        {
+            _jwtTokenHandler.DeleteToken();
+        }
         public int GetLoggedInUserId()
         {
             var Id = -1;
             if (_httpContextAccessor.HttpContext != null)
             {
                 Id = Int32.Parse(_httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value);
-                return Id;
             }
             return Id;
         }
+
     }
 }

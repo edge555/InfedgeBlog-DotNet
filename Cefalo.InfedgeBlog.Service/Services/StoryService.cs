@@ -49,6 +49,11 @@ namespace Cefalo.InfedgeBlog.Service.Services
             {
                 throw new NotFoundException("No story found with this id");
             }
+            var loggedInUserId = _authService.GetLoggedInUserId();
+            if (story.AuthorId != loggedInUserId)
+            {
+                throw new UnauthorizedException("You are not authorized to perform this action.");
+            }
             Story storyData = _mapper.Map<Story>(storyUpdateDto);
             var updatedStory = await _storyRepository.UpdateStoryAsync(Id, storyData);
             var storyDto = _mapper.Map<StoryDto>(updatedStory);
@@ -60,6 +65,11 @@ namespace Cefalo.InfedgeBlog.Service.Services
             if (story == null)
             {
                 throw new NotFoundException("No story found with this id");
+            }
+            var loggedInUserId = _authService.GetLoggedInUserId();
+            if(story.AuthorId != loggedInUserId)
+            {
+                throw new UnauthorizedException("You are not authorized to perform this action.");
             }
             return await _storyRepository.DeleteStoryByIdAsync(Id);
         }

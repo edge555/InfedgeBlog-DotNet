@@ -1,5 +1,4 @@
 ﻿using Cefalo.InfedgeBlog.Database.Models;
-using Cefalo.InfedgeBlog.Service.CustomExceptions;
 using Cefalo.InfedgeBlog.Service.Dtos;
 using Cefalo.InfedgeBlog.Service.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -12,11 +11,9 @@ namespace Cefalo.InfedgeBlog.Api.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
-        private readonly IAuthService _authService;
         public UserController(IUserService userService, IAuthService authService)
         {
             _userService = userService;
-            _authService = authService;
         }
         [HttpGet]
         public async Task<ActionResult<IEnumerable<User>>> GetUsersAsync()
@@ -42,23 +39,21 @@ namespace Cefalo.InfedgeBlog.Api.Controllers
         [HttpPut("{Id}"), Authorize]
         public async Task<IActionResult> UpdateUserByIdAsync(int Id, [FromBody] UserUpdateDto userUpdateDto)
         {
-            var loggedInUserId = _authService.GetLoggedInUserId();
-            if(loggedInUserId != Id)
-            {
-                throw new UnauthorizedException("You are not authorized to perform this action.");
-            }
             var userDto = await _userService.UpdateUserByIdAsync(Id, userUpdateDto);
+            if (userDto == null)
+            {
+                return BadRequest("Can not update user");
+            }
             return Ok(userDto);
         }
         [HttpDelete("{Id}"), Authorize]
         public async Task<IActionResult> DeleteUserByIdAsync(int Id)
         {
-            var loggedInUserId = _authService.GetLoggedInUserId();
-            if (loggedInUserId != Id)
-            {
-                throw new UnauthorizedException("You are not authorized to perform this action.");
+            var deleted = await _userService.DeleteUserByIdAsync(Id);
+            if (!deleted) 
+            { 
+                return BadRequest("Can not delete user"); 
             }
-            await _userService.DeleteUserByIdAsync(Id);
             return NoContent();
         }
     }

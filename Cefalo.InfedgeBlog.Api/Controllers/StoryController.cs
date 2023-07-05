@@ -11,11 +11,9 @@ namespace Cefalo.InfedgeBlog.Api.Controllers
     public class StoryController : ControllerBase
     {
         private readonly IStoryService _storyService;
-        private readonly IAuthService _authService;
         public StoryController(IStoryService storyService, IAuthService authService)
         {
             _storyService = storyService;
-            _authService = authService;
         }
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Story>>> GetStoriesAsync()
@@ -26,24 +24,40 @@ namespace Cefalo.InfedgeBlog.Api.Controllers
         public async Task<IActionResult> GetStory(int Id)
         {
             var story = await _storyService.GetStoryByIdAsync(Id);
+            if (story == null) 
+            { 
+                return BadRequest("Story not found"); 
+            }
             return Ok(story);
         }
         [HttpPost, Authorize]
         public async Task<IActionResult> PostStoryAsync([FromBody] StoryPostDto storyPostDto)
         {
             var storyDto = await _storyService.PostStoryAsync(storyPostDto);
+            if (storyDto == null)
+            {
+                return BadRequest("Can not create story");
+            }
             return Created("", storyDto);
         }
         [HttpPut("{Id}"), Authorize]
         public async Task<IActionResult> UpdateStoryAsync(int Id, [FromBody] StoryUpdateDto storyUpdateDto)
         {
             var storyDto = await _storyService.UpdateStoryAsync(Id, storyUpdateDto);
+            if (storyDto == null)
+            {
+                return BadRequest("Can not update story");
+            }
             return Ok(storyDto);
         }
         [HttpDelete("{Id}"), Authorize]
         public async Task<IActionResult> DeleteStoryByIdAsync(int Id)
         {
-            await _storyService.DeleteStoryByIdAsync(Id);
+            var deleted = await _storyService.DeleteStoryByIdAsync(Id);
+            if (!deleted)
+            {
+                return BadRequest("Can not delete story");
+            }
             return NoContent();
         }
     }

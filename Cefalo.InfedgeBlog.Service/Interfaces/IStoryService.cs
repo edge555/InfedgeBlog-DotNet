@@ -1,5 +1,4 @@
-﻿using Cefalo.InfedgeBlog.Database.Model;
-using Cefalo.InfedgeBlog.Service.Dtos;
+﻿using Cefalo.InfedgeBlog.Service.Dtos;
 
 namespace Cefalo.InfedgeBlog.Service.Interfaces
 {

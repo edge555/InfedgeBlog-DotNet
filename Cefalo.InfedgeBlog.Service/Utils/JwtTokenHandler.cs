@@ -1,5 +1,6 @@
 ﻿using Cefalo.InfedgeBlog.Database.Models;
 using Cefalo.InfedgeBlog.Service.Interfaces;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -11,9 +12,11 @@ namespace Cefalo.InfedgeBlog.Service.Utils
     public class JwtTokenHandler : IJwtTokenHandler
     {
         private readonly IConfiguration _configuration;
-        public JwtTokenHandler(IConfiguration configuration)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        public JwtTokenHandler(IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
         {
             _configuration = configuration;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public string GenerateJwtToken(User user)
@@ -34,6 +37,10 @@ namespace Cefalo.InfedgeBlog.Service.Utils
             );
             var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
             return tokenString;
+        }
+        public void DeleteToken()
+        {
+            _httpContextAccessor.HttpContext = null;
         }
     }
 }

@@ -24,4 +24,8 @@
     <ProjectReference Include="..\Cefalo.InfedgeBlog.Repository\Cefalo.InfedgeBlog.Repository.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Dtos\Validators\" />
+  </ItemGroup>
+
 </Project>
