@@ -3,6 +3,7 @@ using Cefalo.InfedgeBlog.Database.Models;
 using Cefalo.InfedgeBlog.Repository.Interfaces;
 using Cefalo.InfedgeBlog.Service.CustomExceptions;
 using Cefalo.InfedgeBlog.Service.Dtos;
+using Cefalo.InfedgeBlog.Service.Dtos.Validators;
 using Cefalo.InfedgeBlog.Service.Interfaces;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
@@ -15,15 +16,21 @@ namespace Cefalo.InfedgeBlog.Service.Services
         private readonly IMapper _mapper;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IJwtTokenHandler _jwtTokenHandler;
-        public AuthService(IUserRepository userRepository, IMapper mapper, IJwtTokenHandler jwtTokenHandler, IHttpContextAccessor httpContextAccessor)
+        private readonly DtoValidatorBase<SignupDto> _signupDtoValidator;
+
+        private readonly DtoValidatorBase<LoginDto> _loginDtoValidator;
+        public AuthService(IUserRepository userRepository, IMapper mapper, IJwtTokenHandler jwtTokenHandler, IHttpContextAccessor httpContextAccessor, DtoValidatorBase<SignupDto> signupDtoValidator, DtoValidatorBase<LoginDto> loginDtoValidator)
         {
             _userRepository = userRepository;
             _mapper = mapper;
             _jwtTokenHandler = jwtTokenHandler;
             _httpContextAccessor = httpContextAccessor;
+            _signupDtoValidator = signupDtoValidator;
+            _loginDtoValidator = loginDtoValidator;
         }
         public async Task<UserDto> SignupAsync(SignupDto request)
         {
+            _signupDtoValidator.ValidateDto(request);
             var userByUsername = await _userRepository.GetUserByUsernameAsync(request.Username);
             if (userByUsername != null)
             {
@@ -50,6 +57,7 @@ namespace Cefalo.InfedgeBlog.Service.Services
         }
         public async Task<UserWithTokenDto> LoginAsync(LoginDto request)
         {
+            _loginDtoValidator.ValidateDto(request);
             var userByUsername = await _userRepository.GetUserByUsernameAsync(request.Username);
             if (userByUsername == null)
             {

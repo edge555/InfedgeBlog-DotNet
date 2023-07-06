@@ -1,6 +1,8 @@
 using Cefalo.InfedgeBlog.Database.Context;
 using Cefalo.InfedgeBlog.Repository.Interfaces;
 using Cefalo.InfedgeBlog.Repository.Repositories;
+using Cefalo.InfedgeBlog.Service.Dtos.Validators;
+using Cefalo.InfedgeBlog.Service.Dtos;
 using Cefalo.InfedgeBlog.Service.Interfaces;
 using Cefalo.InfedgeBlog.Service.Services;
 using Cefalo.InfedgeBlog.Service.Utils;
@@ -48,6 +50,12 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateAudience = false
         };
     });
+
+builder.Services.AddScoped<DtoValidatorBase<LoginDto>, LoginDtoValidator>();
+builder.Services.AddScoped<DtoValidatorBase<SignupDto>, SignupDtoValidator>();
+builder.Services.AddScoped<DtoValidatorBase<StoryPostDto>, StoryPostDtoValidator>();
+builder.Services.AddScoped<DtoValidatorBase<StoryUpdateDto>, StoryUpdateDtoValidator>();
+builder.Services.AddScoped<DtoValidatorBase<UserUpdateDto>, UserUpateDtoValidator>();
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();

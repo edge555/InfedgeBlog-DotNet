@@ -3,6 +3,7 @@ using Cefalo.InfedgeBlog.Database.Models;
 using Cefalo.InfedgeBlog.Repository.Interfaces;
 using Cefalo.InfedgeBlog.Service.CustomExceptions;
 using Cefalo.InfedgeBlog.Service.Dtos;
+using Cefalo.InfedgeBlog.Service.Dtos.Validators;
 using Cefalo.InfedgeBlog.Service.Interfaces;
 namespace Cefalo.InfedgeBlog.Service.Services
 {
@@ -11,11 +12,13 @@ namespace Cefalo.InfedgeBlog.Service.Services
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
         private readonly IAuthService _authService;
-        public UserService(IUserRepository userRepository, IMapper mapper, IAuthService authService)
+        private readonly DtoValidatorBase<UserUpdateDto> _userUpdateDtoValidator;
+        public UserService(IUserRepository userRepository, IMapper mapper, IAuthService authService, DtoValidatorBase<UserUpdateDto> userUpdateDtoValidator)
         {
             _userRepository = userRepository;
             _mapper = mapper;
             _authService = authService;
+            _userUpdateDtoValidator = userUpdateDtoValidator;
         }
         public async Task<IEnumerable<UserDto>> GetUsersAsync()
         {
@@ -52,6 +55,7 @@ namespace Cefalo.InfedgeBlog.Service.Services
         }
         public async Task<UserDto> UpdateUserByIdAsync(int Id, UserUpdateDto userUpdateDto)
         {
+            _userUpdateDtoValidator.ValidateDto(userUpdateDto)
             var loggedInUserId = _authService.GetLoggedInUserId();
             if (loggedInUserId != Id)
             {

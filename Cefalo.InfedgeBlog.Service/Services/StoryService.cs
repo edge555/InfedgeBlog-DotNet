@@ -3,6 +3,7 @@ using Cefalo.InfedgeBlog.Database.Model;
 using Cefalo.InfedgeBlog.Repository.Interfaces;
 using Cefalo.InfedgeBlog.Service.CustomExceptions;
 using Cefalo.InfedgeBlog.Service.Dtos;
+using Cefalo.InfedgeBlog.Service.Dtos.Validators;
 using Cefalo.InfedgeBlog.Service.Interfaces;
 
 namespace Cefalo.InfedgeBlog.Service.Services
@@ -12,11 +13,15 @@ namespace Cefalo.InfedgeBlog.Service.Services
         private readonly IStoryRepository _storyRepository;
         private readonly IMapper _mapper;
         private readonly IAuthService _authService;
-        public StoryService(IStoryRepository storyRepository, IMapper mapper, IAuthService authService)
+        private readonly DtoValidatorBase<StoryPostDto> _storyPostDtoValidator;
+        private readonly DtoValidatorBase<StoryUpdateDto> _storyUpdateDtoValidator;
+        public StoryService(IStoryRepository storyRepository, IMapper mapper, IAuthService authService, DtoValidatorBase<StoryPostDto> storyPostDtoValidator, DtoValidatorBase<StoryUpdateDto> storyUpdateDtoValidator)
         {
             _storyRepository = storyRepository;
             _mapper = mapper;
             _authService = authService;
+            _storyPostDtoValidator = storyPostDtoValidator;
+            _storyUpdateDtoValidator = storyUpdateDtoValidator;
         }
         public async Task<IEnumerable<StoryDto>> GetStoriesAsync()
         {
@@ -36,6 +41,7 @@ namespace Cefalo.InfedgeBlog.Service.Services
         }
         public async Task<StoryDto> PostStoryAsync(StoryPostDto storyPostDto)
         {
+            _storyPostDtoValidator.ValidateDto(storyPostDto);
             Story storyData = _mapper.Map<Story>(storyPostDto);
             storyData.AuthorId = _authService.GetLoggedInUserId();
             var newStory = await _storyRepository.PostStoryAsync(storyData);
@@ -44,6 +50,7 @@ namespace Cefalo.InfedgeBlog.Service.Services
         }
         public async Task<StoryDto> UpdateStoryAsync(int Id, StoryUpdateDto storyUpdateDto)
         {
+            _storyUpdateDtoValidator.ValidateDto(storyUpdateDto);
             var story = await _storyRepository.GetStoryByIdAsync(Id);
             if (story == null)
             {
