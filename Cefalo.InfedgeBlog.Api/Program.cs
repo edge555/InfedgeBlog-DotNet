@@ -6,6 +6,7 @@ using Cefalo.InfedgeBlog.Service.Dtos;
 using Cefalo.InfedgeBlog.Service.Interfaces;
 using Cefalo.InfedgeBlog.Service.Services;
 using Cefalo.InfedgeBlog.Service.Utils;
+using Cefalo.InfedgeBlog.Api.Utils.GlobalErrorHandler;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -71,6 +72,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
+app.ConfigureExceptionHandler();
 
 app.UseHttpsRedirection();
 

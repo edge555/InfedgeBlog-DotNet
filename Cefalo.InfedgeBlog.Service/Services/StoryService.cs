@@ -23,9 +23,9 @@ namespace Cefalo.InfedgeBlog.Service.Services
             _storyPostDtoValidator = storyPostDtoValidator;
             _storyUpdateDtoValidator = storyUpdateDtoValidator;
         }
-        public async Task<IEnumerable<StoryDto>> GetStoriesAsync()
+        public async Task<IEnumerable<StoryDto>> GetStoriesAsync(int pageNumber, int pageSize)
         {
-            List<Story> stories = await _storyRepository.GetStoriesAsync();
+            List<Story> stories = await _storyRepository.GetStoriesAsync(pageNumber, pageSize);
             IEnumerable<StoryDto> storyDtos = _mapper.Map<IEnumerable<StoryDto>>(stories);
             return storyDtos;
         }
@@ -79,6 +79,10 @@ namespace Cefalo.InfedgeBlog.Service.Services
                 throw new UnauthorizedException("You are not authorized to perform this action.");
             }
             return await _storyRepository.DeleteStoryByIdAsync(Id);
+        }
+        public async Task<int> CountStoriesAsync()
+        {
+            return await _storyRepository.CountStoriesAsync();
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Cefalo.InfedgeBlog.Database.Model;
+﻿using Cefalo.InfedgeBlog.Api.Utils.Pagination.Filter;
+using Cefalo.InfedgeBlog.Api.Utils.Pagination.Helpers;
 using Cefalo.InfedgeBlog.Service.Dtos;
 using Cefalo.InfedgeBlog.Service.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -15,11 +16,19 @@ namespace Cefalo.InfedgeBlog.Api.Controllers
         {
             _storyService = storyService;
         }
+
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Story>>> GetStoriesAsync()
+        public async Task<ActionResult<IEnumerable<StoryDto>>> GetStoriesAsync([FromQuery] PaginationFilter filter)
         {
-            return Ok(await _storyService.GetStoriesAsync());
+            var validFilter = new PaginationFilter(filter.PageNumber, filter.PageSize);
+
+            var pagedData = await _storyService.GetStoriesAsync(validFilter.PageNumber, validFilter.PageSize);
+            var pagedDataList = pagedData.ToList();
+            var totalRecords = await _storyService.CountStoriesAsync();
+            var pagedReponse = PaginationHelper.CreatePagedReponse<StoryDto>(pagedDataList, validFilter, totalRecords);
+            return Ok(pagedReponse);
         }
+
         [HttpGet("{Id}")]
         public async Task<IActionResult> GetStory(int Id)
         {

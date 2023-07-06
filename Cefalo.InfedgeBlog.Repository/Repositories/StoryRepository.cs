@@ -12,9 +12,9 @@ namespace Cefalo.InfedgeBlog.Repository.Repositories
         {
             _dbcontext = dbcontext;
         }
-        public async Task<List<Story>> GetStoriesAsync()
+        public async Task<List<Story>> GetStoriesAsync(int pageNumber, int pageSize)
         {
-            return await _dbcontext.Stories.ToListAsync();
+            return await _dbcontext.Stories.OrderByDescending(x => x.Id).Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
         }
         public async Task<Story> GetStoryByIdAsync(int Id)
         {
@@ -42,5 +42,10 @@ namespace Cefalo.InfedgeBlog.Repository.Repositories
             await _dbcontext.SaveChangesAsync();
             return true;
         }
+        public async Task<int> CountStoriesAsync()
+        {
+            return await _dbcontext.Stories.CountAsync();
+        }
+
     }
 }

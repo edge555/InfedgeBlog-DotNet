@@ -55,7 +55,7 @@ namespace Cefalo.InfedgeBlog.Service.Services
         }
         public async Task<UserDto> UpdateUserByIdAsync(int Id, UserUpdateDto userUpdateDto)
         {
-            _userUpdateDtoValidator.ValidateDto(userUpdateDto)
+            _userUpdateDtoValidator.ValidateDto(userUpdateDto);
             var loggedInUserId = _authService.GetLoggedInUserId();
             if (loggedInUserId != Id)
             {
