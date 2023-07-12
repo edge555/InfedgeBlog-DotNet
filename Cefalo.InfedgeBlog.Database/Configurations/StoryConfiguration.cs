@@ -24,11 +24,9 @@ namespace Cefalo.InfedgeBlog.Database.Configurations
                 .HasForeignKey(s => s.AuthorId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            builder.Property(s => s.CreatedAt)
-                .HasDefaultValueSql("GETDATE()");
+            builder.Property(s => s.CreatedAt);
 
-            builder.Property(s => s.UpdatedAt)
-                .HasDefaultValueSql("GETDATE()");
+            builder.Property(s => s.UpdatedAt);
         }
     }
 }

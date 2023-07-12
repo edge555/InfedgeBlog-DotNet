@@ -23,14 +23,11 @@ namespace Cefalo.InfedgeBlog.Database.Configurations
             builder.Property(u => u.Password)
                 .IsRequired();
 
-            builder.Property(u => u.CreatedAt)
-                .HasDefaultValueSql("GETDATE()");
+            builder.Property(u => u.CreatedAt);
 
-            builder.Property(u => u.UpdatedAt)
-                .HasDefaultValueSql("GETDATE()");
+            builder.Property(u => u.UpdatedAt);
 
-            builder.Property(u => u.PasswordModifiedAt)
-                .HasDefaultValueSql("GETDATE()");
+            builder.Property(u => u.PasswordModifiedAt);
 
             builder.HasMany(u => u.Stories)
                 .WithOne(s => s.Author)

@@ -49,6 +49,9 @@ namespace Cefalo.InfedgeBlog.Service.Services
         public async Task<UserDto> PostUserAsync(UserPostDto userPostDto)
         {
             var userData = _mapper.Map<User>(userPostDto);
+            userData.CreatedAt = DateTime.UtcNow;
+            userData.UpdatedAt = DateTime.UtcNow;
+            userData.PasswordModifiedAt = DateTime.UtcNow;
             var newUser = await _userRepository.PostUserAsync(userData);
             var userDto = _mapper.Map<UserDto>(newUser);
             return userDto;
@@ -67,6 +70,7 @@ namespace Cefalo.InfedgeBlog.Service.Services
                 throw new NotFoundException("No user found with this id");
             }
             var userData = _mapper.Map<User>(userUpdateDto);
+            userData.UpdatedAt = DateTime.UtcNow;
             var updatedUser = await _userRepository.UpdateUserByIdAsync(Id, userData);
             var userDto = _mapper.Map<UserDto>(updatedUser);
             return userDto;
