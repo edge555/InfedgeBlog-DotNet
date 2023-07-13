@@ -12,17 +12,19 @@ namespace Cefalo.InfedgeBlog.Service.Services
     public class StoryService : IStoryService
     {
         private readonly IStoryRepository _storyRepository;
-        private readonly IMapper _mapper;
-        private readonly IAuthService _authService;
         private readonly IUserService _userService;
+        private readonly IMapper _mapper;
+        private readonly IJwtTokenHandler _jwtTokenHandler;
+        private readonly IDateTimeHandler _dateTimeHandler;
         private readonly DtoValidatorBase<StoryPostDto> _storyPostDtoValidator;
         private readonly DtoValidatorBase<StoryUpdateDto> _storyUpdateDtoValidator;
-        public StoryService(IStoryRepository storyRepository, IMapper mapper, IAuthService authService,IUserService userService, DtoValidatorBase<StoryPostDto> storyPostDtoValidator, DtoValidatorBase<StoryUpdateDto> storyUpdateDtoValidator)
+        public StoryService(IStoryRepository storyRepository, IUserService userService, IMapper mapper, IAuthService authService, IJwtTokenHandler jwtTokenHandler, IDateTimeHandler dateTimeHandler, DtoValidatorBase<StoryPostDto> storyPostDtoValidator, DtoValidatorBase<StoryUpdateDto> storyUpdateDtoValidator)
         {
             _storyRepository = storyRepository;
-            _mapper = mapper;
-            _authService = authService;
             _userService = userService;
+            _mapper = mapper;
+            _jwtTokenHandler = jwtTokenHandler;
+            _dateTimeHandler = dateTimeHandler;
             _storyPostDtoValidator = storyPostDtoValidator;
             _storyUpdateDtoValidator = storyUpdateDtoValidator;
         }
@@ -36,8 +38,8 @@ namespace Cefalo.InfedgeBlog.Service.Services
         {
             var story = await _storyRepository.GetStoryByIdAsync(Id);
             if(story == null)
-            { 
-                throw new NotFoundException("No story found with this id");
+            {
+                throw new NotFoundException("No story found with this id.");
             }
             var storyDto = _mapper.Map<StoryDto>(story);
             storyDto.AuthorName = _userService.GetUserByIdAsync(storyDto.AuthorId).Result.Name;
@@ -46,10 +48,14 @@ namespace Cefalo.InfedgeBlog.Service.Services
         public async Task<StoryDto> PostStoryAsync(StoryPostDto storyPostDto)
         {
             _storyPostDtoValidator.ValidateDto(storyPostDto);
+            if (_jwtTokenHandler.IsTokenExpired())
+            {
+                throw new UnauthorizedException("Token expired, Please log in again.");
+            }
             Story storyData = _mapper.Map<Story>(storyPostDto);
-            storyData.AuthorId = _authService.GetLoggedInUserId();
-            storyData.CreatedAt = DateTime.UtcNow;
-            storyData.UpdatedAt = DateTime.UtcNow;
+            storyData.AuthorId = _jwtTokenHandler.GetLoggedInUserId();
+            storyData.CreatedAt = _dateTimeHandler.GetCurrentUtcTime();
+            storyData.UpdatedAt = _dateTimeHandler.GetCurrentUtcTime();
             var newStory = await _storyRepository.PostStoryAsync(storyData);
             var storyDto = _mapper.Map<StoryDto>(newStory);
             return storyDto;
@@ -57,33 +63,41 @@ namespace Cefalo.InfedgeBlog.Service.Services
         public async Task<StoryDto> UpdateStoryAsync(int Id, StoryUpdateDto storyUpdateDto)
         {
             _storyUpdateDtoValidator.ValidateDto(storyUpdateDto);
+            if (_jwtTokenHandler.IsTokenExpired())
+            {
+                throw new UnauthorizedException("Token expired, Please log in again.");
+            }
             var story = await _storyRepository.GetStoryByIdAsync(Id);
             if (story == null)
             {
-                throw new NotFoundException("No story found with this id");
+                throw new NotFoundException("No story found with this id.");
             }
-            var loggedInUserId = _authService.GetLoggedInUserId();
+            var loggedInUserId = _jwtTokenHandler.GetLoggedInUserId();
             if (story.AuthorId != loggedInUserId)
             {
-                throw new UnauthorizedException("You are not authorized to perform this action.");
+                throw new ForbiddenException("You do not have permission to perform this action.");
             }
             Story storyData = _mapper.Map<Story>(storyUpdateDto);
-            storyData.UpdatedAt = DateTime.UtcNow;
+            storyData.UpdatedAt = _dateTimeHandler.GetCurrentUtcTime();
             var updatedStory = await _storyRepository.UpdateStoryAsync(Id, storyData);
             var storyDto = _mapper.Map<StoryDto>(updatedStory);
             return storyDto;
         }
         public async Task<Boolean> DeleteStoryByIdAsync(int Id)
         {
+            if (_jwtTokenHandler.IsTokenExpired())
+            {
+                throw new UnauthorizedException("Token expired, Please log in again.");
+            }
             var story = await _storyRepository.GetStoryByIdAsync(Id);
             if (story == null)
             {
-                throw new NotFoundException("No story found with this id");
+                throw new NotFoundException("No story found with this id.");
             }
-            var loggedInUserId = _authService.GetLoggedInUserId();
+            var loggedInUserId = _jwtTokenHandler.GetLoggedInUserId();
             if(story.AuthorId != loggedInUserId)
             {
-                throw new UnauthorizedException("You are not authorized to perform this action.");
+                throw new ForbiddenException("You do not have permission to perform this action.");
             }
             return await _storyRepository.DeleteStoryByIdAsync(Id);
         }

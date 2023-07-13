@@ -5,8 +5,6 @@ using Cefalo.InfedgeBlog.Service.CustomExceptions;
 using Cefalo.InfedgeBlog.Service.Dtos;
 using Cefalo.InfedgeBlog.Service.Dtos.Validators;
 using Cefalo.InfedgeBlog.Service.Interfaces;
-using Microsoft.AspNetCore.Http;
-using System.Security.Claims;
 
 namespace Cefalo.InfedgeBlog.Service.Services
 {
@@ -14,17 +12,16 @@ namespace Cefalo.InfedgeBlog.Service.Services
     {
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
-        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IJwtTokenHandler _jwtTokenHandler;
+        private readonly IDateTimeHandler _dateTimeHandler;
         private readonly DtoValidatorBase<SignupDto> _signupDtoValidator;
-
         private readonly DtoValidatorBase<LoginDto> _loginDtoValidator;
-        public AuthService(IUserRepository userRepository, IMapper mapper, IJwtTokenHandler jwtTokenHandler, IHttpContextAccessor httpContextAccessor, DtoValidatorBase<SignupDto> signupDtoValidator, DtoValidatorBase<LoginDto> loginDtoValidator)
+        public AuthService(IUserRepository userRepository, IMapper mapper, IJwtTokenHandler jwtTokenHandler, IDateTimeHandler dateTimeHandler, DtoValidatorBase<SignupDto> signupDtoValidator, DtoValidatorBase<LoginDto> loginDtoValidator)
         {
             _userRepository = userRepository;
             _mapper = mapper;
             _jwtTokenHandler = jwtTokenHandler;
-            _httpContextAccessor = httpContextAccessor;
+            _dateTimeHandler = dateTimeHandler;
             _signupDtoValidator = signupDtoValidator;
             _loginDtoValidator = loginDtoValidator;
         }
@@ -44,9 +41,9 @@ namespace Cefalo.InfedgeBlog.Service.Services
             var user = _mapper.Map<User>(request);
             string hashedPassword = BCrypt.Net.BCrypt.HashPassword(request.Password);
             user.Password = hashedPassword;
-            user.CreatedAt = DateTime.UtcNow;
-            user.UpdatedAt = DateTime.UtcNow;
-            user.PasswordModifiedAt = DateTime.UtcNow;
+            user.CreatedAt = _dateTimeHandler.GetCurrentUtcTime();
+            user.UpdatedAt = _dateTimeHandler.GetCurrentUtcTime();
+            user.PasswordModifiedAt = _dateTimeHandler.GetCurrentUtcTime();
             var newUser = await _userRepository.PostUserAsync(user);
             if(newUser == null) 
             {
@@ -76,15 +73,5 @@ namespace Cefalo.InfedgeBlog.Service.Services
         {
             _jwtTokenHandler.DeleteToken();
         }
-        public int GetLoggedInUserId()
-        {
-            var Id = -1;
-            if (_httpContextAccessor.HttpContext != null)
-            {
-                Id = Int32.Parse(_httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value);
-            }
-            return Id;
-        }
-
     }
 }

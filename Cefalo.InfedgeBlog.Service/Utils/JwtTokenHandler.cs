@@ -38,6 +38,27 @@ namespace Cefalo.InfedgeBlog.Service.Utils
             var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
             return tokenString;
         }
+        public int GetLoggedInUserId()
+        {
+            var Id = -1;
+            if (_httpContextAccessor.HttpContext != null)
+            {
+                Id = Int32.Parse(_httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier).Value);
+            }
+            return Id;
+        }
+        public Boolean IsTokenExpired()
+        {
+            var tokenGenerationTimeString = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.Expiration).Value;
+            if(tokenGenerationTimeString == null)
+            {
+                return true;
+            }
+            var tokenGenerationTime = Convert.ToDateTime(tokenGenerationTimeString);
+            DateTime expirationTime = tokenGenerationTime.AddDays(3);
+            DateTime currentTime = DateTime.UtcNow;
+            return currentTime > expirationTime;
+        }
         public void DeleteToken()
         {
             _httpContextAccessor.HttpContext = null;

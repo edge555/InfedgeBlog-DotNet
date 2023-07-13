@@ -23,11 +23,14 @@ namespace Cefalo.InfedgeBlog.Database.Configurations
             builder.Property(u => u.Password)
                 .IsRequired();
 
-            builder.Property(u => u.CreatedAt);
+            builder.Property(u => u.CreatedAt)
+                .IsRequired();
 
-            builder.Property(u => u.UpdatedAt);
+            builder.Property(u => u.UpdatedAt)
+                .IsRequired();
 
-            builder.Property(u => u.PasswordModifiedAt);
+            builder.Property(u => u.PasswordModifiedAt)
+                .IsRequired(); 
 
             builder.HasMany(u => u.Stories)
                 .WithOne(s => s.Author)

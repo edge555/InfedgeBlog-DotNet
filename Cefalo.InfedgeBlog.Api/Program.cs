@@ -75,6 +75,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IStoryRepository, StoryRepository>();
 builder.Services.AddScoped<IStoryService, StoryService>();
 builder.Services.AddScoped<IJwtTokenHandler,JwtTokenHandler> ();
+builder.Services.AddScoped<IDateTimeHandler, DateTimeHandler>();
 
 var app = builder.Build();
 

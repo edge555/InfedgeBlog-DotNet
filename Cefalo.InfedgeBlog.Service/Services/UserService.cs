@@ -5,19 +5,22 @@ using Cefalo.InfedgeBlog.Service.CustomExceptions;
 using Cefalo.InfedgeBlog.Service.Dtos;
 using Cefalo.InfedgeBlog.Service.Dtos.Validators;
 using Cefalo.InfedgeBlog.Service.Interfaces;
+
 namespace Cefalo.InfedgeBlog.Service.Services
 {
     public class UserService : IUserService
     {
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
-        private readonly IAuthService _authService;
+        private readonly IJwtTokenHandler _jwtTokenHandler;
+        private readonly IDateTimeHandler _dateTimeHandler;
         private readonly DtoValidatorBase<UserUpdateDto> _userUpdateDtoValidator;
-        public UserService(IUserRepository userRepository, IMapper mapper, IAuthService authService, DtoValidatorBase<UserUpdateDto> userUpdateDtoValidator)
+        public UserService(IUserRepository userRepository, IMapper mapper, IJwtTokenHandler jwtTokenHandler, IDateTimeHandler dateTimeHandler, DtoValidatorBase<UserUpdateDto> userUpdateDtoValidator)
         {
             _userRepository = userRepository;
             _mapper = mapper;
-            _authService = authService;
+            _jwtTokenHandler = jwtTokenHandler;
+            _dateTimeHandler = dateTimeHandler;
             _userUpdateDtoValidator = userUpdateDtoValidator;
         }
         public async Task<IEnumerable<UserDto>> GetUsersAsync()
@@ -48,10 +51,14 @@ namespace Cefalo.InfedgeBlog.Service.Services
         }
         public async Task<UserDto> PostUserAsync(UserPostDto userPostDto)
         {
+            if (_jwtTokenHandler.IsTokenExpired())
+            {
+                throw new UnauthorizedException("Token expired, Please log in again.");
+            }
             var userData = _mapper.Map<User>(userPostDto);
-            userData.CreatedAt = DateTime.UtcNow;
-            userData.UpdatedAt = DateTime.UtcNow;
-            userData.PasswordModifiedAt = DateTime.UtcNow;
+            userData.CreatedAt = _dateTimeHandler.GetCurrentUtcTime();
+            userData.UpdatedAt = _dateTimeHandler.GetCurrentUtcTime();
+            userData.PasswordModifiedAt = _dateTimeHandler.GetCurrentUtcTime();
             var newUser = await _userRepository.PostUserAsync(userData);
             var userDto = _mapper.Map<UserDto>(newUser);
             return userDto;
@@ -59,33 +66,41 @@ namespace Cefalo.InfedgeBlog.Service.Services
         public async Task<UserDto> UpdateUserByIdAsync(int Id, UserUpdateDto userUpdateDto)
         {
             _userUpdateDtoValidator.ValidateDto(userUpdateDto);
-            var loggedInUserId = _authService.GetLoggedInUserId();
-            if (loggedInUserId != Id)
+            if (_jwtTokenHandler.IsTokenExpired())
             {
-                throw new UnauthorizedException("You are not authorized to perform this action.");
+                throw new UnauthorizedException("Token expired, Please log in again.");
             }
             var user = await _userRepository.GetUserByIdAsync(Id);
             if (user == null)
             {
                 throw new NotFoundException("No user found with this id");
             }
+            var loggedInUserId = _jwtTokenHandler.GetLoggedInUserId();
+            if (loggedInUserId != Id)
+            {
+                throw new ForbiddenException("You do not have permission to perform this action.");
+            }
             var userData = _mapper.Map<User>(userUpdateDto);
-            userData.UpdatedAt = DateTime.UtcNow;
+            userData.UpdatedAt = _dateTimeHandler.GetCurrentUtcTime();
             var updatedUser = await _userRepository.UpdateUserByIdAsync(Id, userData);
             var userDto = _mapper.Map<UserDto>(updatedUser);
             return userDto;
         }
         public async Task<Boolean> DeleteUserByIdAsync(int Id)
         {
-            var loggedInUserId = _authService.GetLoggedInUserId();
-            if (loggedInUserId != Id)
+            if (_jwtTokenHandler.IsTokenExpired())
             {
-                throw new UnauthorizedException("You are not authorized to perform this action.");
+                throw new UnauthorizedException("Token expired, Please log in again.");
             }
             var user = await _userRepository.GetUserByIdAsync(Id);
             if (user == null)
             {
                 throw new NotFoundException("No user found with this id");
+            }
+            var loggedInUserId = _jwtTokenHandler.GetLoggedInUserId();
+            if (loggedInUserId != Id)
+            {
+                throw new ForbiddenException("You do not have permission to perform this action.");
             }
             return await _userRepository.DeleteUserByIdAsync(Id);
         }

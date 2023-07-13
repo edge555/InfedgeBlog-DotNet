@@ -6,6 +6,5 @@ namespace Cefalo.InfedgeBlog.Service.Interfaces
     {
         Task<UserDto> SignupAsync(SignupDto request);
         Task<UserWithTokenDto> LoginAsync(LoginDto request);
-        int GetLoggedInUserId();
     }
 }
