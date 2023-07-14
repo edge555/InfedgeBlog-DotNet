@@ -27,7 +27,7 @@ namespace Cefalo.InfedgeBlog.Repository.Repositories
             await _dbcontext.SaveChangesAsync();
             return newStory.Entity;
         }
-        public async Task<Story> UpdateStoryAsync(int Id, Story story)
+        public async Task<Story> UpdateStoryByIdAsync(int Id, Story story)
         {
             var storyData = await _dbcontext.Stories.FindAsync(Id);
             storyData.Title = story.Title;

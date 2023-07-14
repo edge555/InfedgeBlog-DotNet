@@ -23,9 +23,9 @@ namespace Cefalo.InfedgeBlog.Service.Services
             _dateTimeHandler = dateTimeHandler;
             _userUpdateDtoValidator = userUpdateDtoValidator;
         }
-        public async Task<IEnumerable<UserDto>> GetUsersAsync()
+        public async Task<IEnumerable<UserDto>> GetUsersAsync(int pageNumber, int pageSize)
         {
-            List<User> users = await _userRepository.GetUsersAsync();
+            List<User> users = await _userRepository.GetUsersAsync(pageNumber, pageSize);
             IEnumerable<UserDto> userDtos = _mapper.Map<IEnumerable<UserDto>>(users);
             return userDtos;
         }
@@ -103,6 +103,11 @@ namespace Cefalo.InfedgeBlog.Service.Services
                 throw new ForbiddenException("You do not have permission to perform this action.");
             }
             return await _userRepository.DeleteUserByIdAsync(Id);
+        }
+
+        public async Task<int> CountUsersAsync()
+        {
+            return await _userRepository.CountUsersAsync();
         }
     }
 }

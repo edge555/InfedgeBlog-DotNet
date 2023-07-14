@@ -12,7 +12,7 @@ namespace Cefalo.InfedgeBlog.Api.Controllers
     public class StoryController : ControllerBase
     {
         private readonly IStoryService _storyService;
-        public StoryController(IStoryService storyService, IAuthService authService)
+        public StoryController(IStoryService storyService)
         {
             _storyService = storyService;
         }
@@ -30,12 +30,12 @@ namespace Cefalo.InfedgeBlog.Api.Controllers
         }
 
         [HttpGet("{Id}")]
-        public async Task<IActionResult> GetStory(int Id)
+        public async Task<IActionResult> GetStoryByIdAsync(int Id)
         {
             var story = await _storyService.GetStoryByIdAsync(Id);
             if (story == null) 
             { 
-                return BadRequest("Story not found"); 
+                return BadRequest("Story not found."); 
             }
             return Ok(story);
         }
@@ -45,17 +45,17 @@ namespace Cefalo.InfedgeBlog.Api.Controllers
             var storyDto = await _storyService.PostStoryAsync(storyPostDto);
             if (storyDto == null)
             {
-                return BadRequest("Can not create story");
+                return BadRequest("Can not create story.");
             }
             return Created("", storyDto);
         }
         [HttpPut("{Id}"), Authorize]
-        public async Task<IActionResult> UpdateStoryAsync(int Id, [FromBody] StoryUpdateDto storyUpdateDto)
+        public async Task<IActionResult> UpdateStoryByIdAsync(int Id, [FromBody] StoryUpdateDto storyUpdateDto)
         {
-            var storyDto = await _storyService.UpdateStoryAsync(Id, storyUpdateDto);
+            var storyDto = await _storyService.UpdateStoryByIdAsync(Id, storyUpdateDto);
             if (storyDto == null)
             {
-                return BadRequest("Can not update story");
+                return BadRequest("Can not update story.");
             }
             return Ok(storyDto);
         }
@@ -65,7 +65,7 @@ namespace Cefalo.InfedgeBlog.Api.Controllers
             var deleted = await _storyService.DeleteStoryByIdAsync(Id);
             if (!deleted)
             {
-                return BadRequest("Can not delete story");
+                return BadRequest("Can not delete story.");
             }
             return NoContent();
         }
