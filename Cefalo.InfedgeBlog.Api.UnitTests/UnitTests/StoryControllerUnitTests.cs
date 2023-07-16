@@ -149,7 +149,7 @@ namespace Cefalo.InfedgeBlog.Api.UnitTests
         {
             // Arrange
             var nonExistingStoryId = -1;
-            A.CallTo(() => fakeStoryService.GetStoryByIdAsync(nonExistingStoryId)).Returns(Task.FromResult<StoryDto>(null));
+            A.CallTo(() => fakeStoryService.GetStoryByIdAsync(nonExistingStoryId)).Returns((StoryDto)null!);
             
             // Act
             var result = await fakeStoryController.GetStoryByIdAsync(nonExistingStoryId);
@@ -198,7 +198,7 @@ namespace Cefalo.InfedgeBlog.Api.UnitTests
             // Arrange
             var storyDtoWithoutBody = new StoryPostDto { Title = "Title1" };
 
-            A.CallTo(() => fakeStoryService.PostStoryAsync(storyDtoWithoutBody)).Returns(Task.FromResult<StoryDto>(null));
+            A.CallTo(() => fakeStoryService.PostStoryAsync(storyDtoWithoutBody)).Returns((StoryDto)null!);
 
             // Act
             var result = await fakeStoryController.PostStoryAsync(storyDtoWithoutBody);
@@ -215,7 +215,7 @@ namespace Cefalo.InfedgeBlog.Api.UnitTests
             // Arrange
             var storyDtoWithoutTitle = new StoryPostDto { Body = "Body1" };
 
-            A.CallTo(() => fakeStoryService.PostStoryAsync(storyDtoWithoutTitle)).Returns(Task.FromResult<StoryDto>(null));
+            A.CallTo(() => fakeStoryService.PostStoryAsync(storyDtoWithoutTitle)).Returns((StoryDto)null!);
 
             // Act
             var result = await fakeStoryController.PostStoryAsync(storyDtoWithoutTitle);
@@ -265,7 +265,7 @@ namespace Cefalo.InfedgeBlog.Api.UnitTests
         {
             // Arrange
             var nonExistingStoryId = -1;
-            A.CallTo(() => fakeStoryService.UpdateStoryByIdAsync(nonExistingStoryId, fakeStoryUpdateDto)).Returns(Task.FromResult<StoryDto>(null));
+            A.CallTo(() => fakeStoryService.UpdateStoryByIdAsync(nonExistingStoryId, fakeStoryUpdateDto)).Returns((StoryDto)null!);
             
             // Act
             var result = await fakeStoryController.UpdateStoryByIdAsync(nonExistingStoryId, fakeStoryUpdateDto);

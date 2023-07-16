@@ -17,7 +17,7 @@ namespace Cefalo.InfedgeBlog.Service.Services
         private readonly IDateTimeHandler _dateTimeHandler;
         private readonly DtoValidatorBase<StoryPostDto> _storyPostDtoValidator;
         private readonly DtoValidatorBase<StoryUpdateDto> _storyUpdateDtoValidator;
-        public StoryService(IStoryRepository storyRepository, IUserService userService, IMapper mapper, IAuthService authService, IJwtTokenHandler jwtTokenHandler, IDateTimeHandler dateTimeHandler, DtoValidatorBase<StoryPostDto> storyPostDtoValidator, DtoValidatorBase<StoryUpdateDto> storyUpdateDtoValidator)
+        public StoryService(IStoryRepository storyRepository, IUserService userService, IMapper mapper, IJwtTokenHandler jwtTokenHandler, IDateTimeHandler dateTimeHandler, DtoValidatorBase<StoryPostDto> storyPostDtoValidator, DtoValidatorBase<StoryUpdateDto> storyUpdateDtoValidator)
         {
             _storyRepository = storyRepository;
             _userService = userService;
@@ -27,6 +27,7 @@ namespace Cefalo.InfedgeBlog.Service.Services
             _storyPostDtoValidator = storyPostDtoValidator;
             _storyUpdateDtoValidator = storyUpdateDtoValidator;
         }
+
         public async Task<IEnumerable<StoryDto>> GetStoriesAsync(int pageNumber, int pageSize)
         {
             List<Story> stories = await _storyRepository.GetStoriesAsync(pageNumber, pageSize);

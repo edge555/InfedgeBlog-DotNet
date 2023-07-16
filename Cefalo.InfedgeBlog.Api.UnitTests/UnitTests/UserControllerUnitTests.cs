@@ -38,6 +38,7 @@ namespace Cefalo.InfedgeBlog.Api.UnitTests
             };
         }
         #region GetUsersAsync
+
         [Fact]
         public async void GetUsersAsync_GetUsersAsyncIsCalledOnce()
         {
@@ -100,6 +101,7 @@ namespace Cefalo.InfedgeBlog.Api.UnitTests
         #endregion
 
         #region GetUserByIdAsync
+
         [Fact]
         public async void GetUserByIdAsync_WithValidParameter_GetUserByIdAsyncAsyncIsCalledOnce()
         {
@@ -140,7 +142,7 @@ namespace Cefalo.InfedgeBlog.Api.UnitTests
         {
             // Arrange
             var nonExistingUserId = -1;
-            A.CallTo(() => fakeUserService.GetUserByIdAsync(nonExistingUserId)).Returns(Task.FromResult<UserDto>(null));
+            A.CallTo(() => fakeUserService.GetUserByIdAsync(nonExistingUserId)).Returns((UserDto)null!);
             
             // Act
             var result = await fakeUserController.GetUserByIdAsync(nonExistingUserId);
@@ -234,7 +236,7 @@ namespace Cefalo.InfedgeBlog.Api.UnitTests
         {
             // Arrange
             var nonExistingUserId = -1;
-            A.CallTo(() => fakeUserService.UpdateUserByIdAsync(nonExistingUserId, fakeUserUpdateDto)).Returns(Task.FromResult<UserDto>(null));
+            A.CallTo(() => fakeUserService.UpdateUserByIdAsync(nonExistingUserId, fakeUserUpdateDto)).Returns((UserDto)null!);
 
             // Act
             var result = await fakeUserController.UpdateUserByIdAsync(nonExistingUserId, fakeUserUpdateDto);
@@ -251,7 +253,7 @@ namespace Cefalo.InfedgeBlog.Api.UnitTests
             int existingUserId = 1;
             var invalidUserUpdateDto = new UserUpdateDto { Name = "Ahmed Shoaib", Password = "abcd1234" };
 
-            A.CallTo(() => fakeUserService.UpdateUserByIdAsync(existingUserId, invalidUserUpdateDto)).Returns((UserDto)null);
+            A.CallTo(() => fakeUserService.UpdateUserByIdAsync(existingUserId, invalidUserUpdateDto)).Returns((UserDto)null!);
             var controller = new UserController(fakeUserService);
 
             // Act
