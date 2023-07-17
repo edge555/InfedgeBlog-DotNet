@@ -14,13 +14,15 @@ namespace Cefalo.InfedgeBlog.Service.Services
         private readonly IMapper _mapper;
         private readonly IJwtTokenHandler _jwtTokenHandler;
         private readonly IDateTimeHandler _dateTimeHandler;
+        private readonly DtoValidatorBase<UserPostDto> _userPostDtoValidator;
         private readonly DtoValidatorBase<UserUpdateDto> _userUpdateDtoValidator;
-        public UserService(IUserRepository userRepository, IMapper mapper, IJwtTokenHandler jwtTokenHandler, IDateTimeHandler dateTimeHandler, DtoValidatorBase<UserUpdateDto> userUpdateDtoValidator)
+        public UserService(IUserRepository userRepository, IMapper mapper, IJwtTokenHandler jwtTokenHandler, IDateTimeHandler dateTimeHandler, DtoValidatorBase<UserPostDto> userPostDtoValidator, DtoValidatorBase<UserUpdateDto> userUpdateDtoValidator)
         {
             _userRepository = userRepository;
             _mapper = mapper;
             _jwtTokenHandler = jwtTokenHandler;
             _dateTimeHandler = dateTimeHandler;
+            _userPostDtoValidator = userPostDtoValidator;
             _userUpdateDtoValidator = userUpdateDtoValidator;
         }
         public async Task<IEnumerable<UserDto>> GetUsersAsync(int pageNumber, int pageSize)
@@ -51,6 +53,7 @@ namespace Cefalo.InfedgeBlog.Service.Services
         }
         public async Task<UserDto> PostUserAsync(UserPostDto userPostDto)
         {
+            _userPostDtoValidator.ValidateDto(userPostDto);
             if (_jwtTokenHandler.IsTokenExpired())
             {
                 throw new UnauthorizedException("Token expired, Please log in again.");

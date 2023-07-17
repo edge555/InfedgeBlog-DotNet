@@ -67,14 +67,16 @@ builder.Services.AddScoped<DtoValidatorBase<LoginDto>, LoginDtoValidator>();
 builder.Services.AddScoped<DtoValidatorBase<SignupDto>, SignupDtoValidator>();
 builder.Services.AddScoped<DtoValidatorBase<StoryPostDto>, StoryPostDtoValidator>();
 builder.Services.AddScoped<DtoValidatorBase<StoryUpdateDto>, StoryUpdateDtoValidator>();
-builder.Services.AddScoped<DtoValidatorBase<UserUpdateDto>, UserUpateDtoValidator>();
+builder.Services.AddScoped<DtoValidatorBase<UserPostDto>, UserPostDtoValidator>();
+builder.Services.AddScoped<DtoValidatorBase<UserUpdateDto>, UserUpdateDtoValidator>();
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IStoryRepository, StoryRepository>();
 builder.Services.AddScoped<IStoryService, StoryService>();
-builder.Services.AddScoped<IJwtTokenHandler,JwtTokenHandler> ();
+
+builder.Services.AddScoped<IJwtTokenHandler, JwtTokenHandler> ();
 builder.Services.AddScoped<IDateTimeHandler, DateTimeHandler>();
 builder.Services.AddScoped<IPasswordHandler, PasswordHandler>();
 
