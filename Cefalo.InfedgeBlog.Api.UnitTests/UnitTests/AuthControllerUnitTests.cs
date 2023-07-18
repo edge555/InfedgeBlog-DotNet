@@ -13,18 +13,20 @@ namespace Cefalo.InfedgeBlog.Api.UnitTests
     {
         private readonly IAuthService fakeAuthService;
         private readonly AuthController fakeAuthController;
-        private readonly FakeUserData? fakeUserData;
-        private readonly SignupDto? fakeSignupDto;
-        private readonly LoginDto? fakeLoginDto;
-        private readonly UserWithTokenDto? fakeUserWithTokenDto;
-        private readonly UserDto? fakeUserDto;
-  
+        private readonly FakeUserData fakeUserData;
+        private readonly UserDto fakeUserDto;
+        private readonly SignupDto fakeSignupDto;
+        private readonly LoginDto fakeLoginDto;
+        private readonly UserWithTokenDto fakeUserWithTokenDto;
+        
         public AuthControllerUnitTests()
         {
             fakeAuthService = A.Fake<IAuthService>();
             fakeAuthController = new AuthController(fakeAuthService);
             fakeUserData = A.Fake<FakeUserData>();
             fakeUserDto = fakeUserData.fakeUserDto;
+            fakeSignupDto = fakeUserData.fakeSignupDto;
+            fakeLoginDto = fakeUserData.fakeLoginDto;
             fakeUserWithTokenDto = fakeUserData.fakeUserWithTokenDto;
         }
         #region SignupAsync

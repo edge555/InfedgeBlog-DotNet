@@ -2,7 +2,7 @@
 using Cefalo.InfedgeBlog.Service.Dtos;
 using FakeItEasy;
 
-namespace Cefalo.InfedgeBlog.Api.UnitTests.FakeData
+namespace Cefalo.InfedgeBlog.Service.UnitTests.FakeData
 {
     public class FakeStoryData
     {

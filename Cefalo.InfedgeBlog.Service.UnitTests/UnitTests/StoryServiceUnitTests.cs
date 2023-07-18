@@ -5,7 +5,7 @@ using Cefalo.InfedgeBlog.Service.Dtos;
 using Cefalo.InfedgeBlog.Service.Interfaces;
 using FakeItEasy;
 using Cefalo.InfedgeBlog.Database.Model;
-using Cefalo.InfedgeBlog.Api.UnitTests.FakeData;
+using Cefalo.InfedgeBlog.Service.UnitTests.FakeData;
 using Cefalo.InfedgeBlog.Service.Services;
 using Xunit;
 using Cefalo.InfedgeBlog.Service.CustomExceptions;

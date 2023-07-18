@@ -37,6 +37,7 @@ namespace Cefalo.InfedgeBlog.Api.UnitTests
                 PageSize = 10
             };
         }
+
         #region GetUsersAsync
 
         [Fact]
@@ -98,6 +99,7 @@ namespace Cefalo.InfedgeBlog.Api.UnitTests
             pagedResponse.TotalRecords.Should().Be(expectedPagedResponse.TotalRecords);
 
         }
+
         #endregion
 
         #region GetUserByIdAsync
@@ -149,12 +151,13 @@ namespace Cefalo.InfedgeBlog.Api.UnitTests
             
             // Assert
             var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
-            Assert.Equal(StatusCodes.Status400BadRequest, badRequestResult.StatusCode);
+            Assert.Equal(badRequestResult.StatusCode, 400);
         }
 
         #endregion
 
         #region PostUserAsync
+
         [Fact]
         public async void PostUserAsync_WithValidParameter_PostUserAsyncIsCalledOnce()
         {
@@ -167,6 +170,7 @@ namespace Cefalo.InfedgeBlog.Api.UnitTests
             //Assert
             A.CallTo(() => fakeUserService.PostUserAsync(fakeUserPostDto)).MustHaveHappenedOnceExactly();
         }
+
         [Fact]
         public async void PostUserAsync_WithValidParameter_ReturnsCreatedUserCorrectly()
         {
@@ -183,11 +187,12 @@ namespace Cefalo.InfedgeBlog.Api.UnitTests
             newUserObject.Value.Should().BeEquivalentTo(fakeUserDto);
             newUserObject.StatusCode.Should().Be(201);
         }
+
         [Fact]
         public async Task PostUserAsync_WithEmptyList_ReturnsNoContent()
         {
             // Arrange
-            A.CallTo(() => fakeUserService.PostUserAsync(fakeUserPostDto)).Returns((UserDto)null);
+            A.CallTo(() => fakeUserService.PostUserAsync(fakeUserPostDto)).Returns((UserDto)null!);
             var controller = new UserController(fakeUserService);
 
             // Act
@@ -197,9 +202,11 @@ namespace Cefalo.InfedgeBlog.Api.UnitTests
             var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
             badRequestResult.StatusCode.Should().Be(400);
         }
+
         #endregion
 
         #region UpdateUserByIdAsync
+
         [Fact]
         public async void UpdateUserByIdAsync_WithValidParameter_UpdateUserAsyncIsCalledOnce()
         {
@@ -212,6 +219,7 @@ namespace Cefalo.InfedgeBlog.Api.UnitTests
             // Assert
             A.CallTo(() => fakeUserService.UpdateUserByIdAsync(fakeUserDto.Id, fakeUserUpdateDto)).MustHaveHappenedOnceExactly();
         }
+
         [Fact]
         public async void UpdateUserByIdAsync_WithValidParameter_ReturnsUpdatedUserCorrectly()
         {
@@ -231,6 +239,7 @@ namespace Cefalo.InfedgeBlog.Api.UnitTests
             Assert.Equal(existingUserId, updatedUser.Id);
             Assert.Equal(fakeUserUpdateDto.Name, updatedUser.Name);
         }
+
         [Fact]
         public async Task UpdateUserById_WithNonExistingId_ReturnsBadRequest()
         {
@@ -243,9 +252,10 @@ namespace Cefalo.InfedgeBlog.Api.UnitTests
 
             // Assert
             var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
-            Assert.Equal(StatusCodes.Status400BadRequest, badRequestResult.StatusCode);
+            Assert.Equal(badRequestResult.StatusCode, 400);
             Assert.Equal("Can not update user.", badRequestResult.Value);
         }
+
         [Fact]
         public async Task UpdateUserByIdAsync_WithInvalidParameter_ReturnsBadRequest()
         {
@@ -267,6 +277,7 @@ namespace Cefalo.InfedgeBlog.Api.UnitTests
         #endregion
 
         #region DeleteUserByIdAsync
+
         [Fact]
         public async void DeleteUserAsync_WithValidParameter_DeleteUserAsyncIsCalledOnce()
         {
@@ -312,6 +323,7 @@ namespace Cefalo.InfedgeBlog.Api.UnitTests
             var badRequestResult = (BadRequestObjectResult)result;
             badRequestResult.StatusCode.Should().Be(400);
         }
+
         #endregion
     }
 }
