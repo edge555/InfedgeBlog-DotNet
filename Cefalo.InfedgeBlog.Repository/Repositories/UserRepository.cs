@@ -40,7 +40,7 @@ namespace Cefalo.InfedgeBlog.Repository.Repositories
         public async Task<User> UpdateUserByIdAsync(int Id, User user)
         {
             var userData = await _dbcontext.Users.FindAsync(Id);
-            userData.Email = user.Email;
+            userData.Name = user.Name;
             userData.Password = user.Password;
             await _dbcontext.SaveChangesAsync();
             return userData;

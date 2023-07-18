@@ -13,7 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cefalo.InfedgeBlog.Reposito
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cefalo.InfedgeBlog.Api.UnitTests", "..\Cefalo.InfedgeBlog.Api.UnitTests\Cefalo.InfedgeBlog.Api.UnitTests.csproj", "{509397B9-40A2-444D-B0E9-42CD9A5CF3EE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cefalo.InfedgeBlog.Service.UnitTests", "..\Cefalo.InfedgeBlog.Service.UnitTests\Cefalo.InfedgeBlog.Service.UnitTests.csproj", "{E5E7D33B-D2B1-49B2-8BA2-CC4051347461}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cefalo.InfedgeBlog.Service.UnitTests", "..\Cefalo.InfedgeBlog.Service.UnitTests\Cefalo.InfedgeBlog.Service.UnitTests.csproj", "{E5E7D33B-D2B1-49B2-8BA2-CC4051347461}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cefalo.InfedgeBlog.Repository.UnitTests", "..\Cefalo.InfedgeBlog.Repository.UnitTests\Cefalo.InfedgeBlog.Repository.UnitTests.csproj", "{81F0D746-7FB5-4EAA-BBFC-D2FB36326ADA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{E5E7D33B-D2B1-49B2-8BA2-CC4051347461}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E5E7D33B-D2B1-49B2-8BA2-CC4051347461}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E5E7D33B-D2B1-49B2-8BA2-CC4051347461}.Release|Any CPU.Build.0 = Release|Any CPU
+		{81F0D746-7FB5-4EAA-BBFC-D2FB36326ADA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{81F0D746-7FB5-4EAA-BBFC-D2FB36326ADA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{81F0D746-7FB5-4EAA-BBFC-D2FB36326ADA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{81F0D746-7FB5-4EAA-BBFC-D2FB36326ADA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
