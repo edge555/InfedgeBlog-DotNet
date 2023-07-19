@@ -8,6 +8,7 @@ using Cefalo.InfedgeBlog.Service.Interfaces;
 using FakeItEasy;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Xunit;
 
 namespace Cefalo.InfedgeBlog.Api.UnitTests
@@ -22,10 +23,10 @@ namespace Cefalo.InfedgeBlog.Api.UnitTests
         private readonly UserPostDto fakeUserPostDto;
         private readonly UserUpdateDto fakeUserUpdateDto;
         private readonly PaginationFilter fakePaginationFilter;
+        private readonly ILogger<UserController> fakeLogger;
         public UserControllerUnitTests()
         {
             fakeUserService = A.Fake<IUserService>();
-            fakeUserController = new UserController(fakeUserService);
             fakeUserData = A.Fake<FakeUserData>();
             fakeUserDto = fakeUserData.fakeUserDto;
             fakeUserDtoList = fakeUserData.fakeUserDtoList;
@@ -36,6 +37,8 @@ namespace Cefalo.InfedgeBlog.Api.UnitTests
                 PageNumber = 1,
                 PageSize = 10
             };
+            fakeLogger = A.Fake<ILogger<UserController>>();
+            fakeUserController = new UserController(fakeUserService, fakeLogger);
         }
 
         #region GetUsersAsync
@@ -123,10 +126,9 @@ namespace Cefalo.InfedgeBlog.Api.UnitTests
             // Arrange
             int existingUserId = 1;
             A.CallTo(() => fakeUserService.GetUserByIdAsync(existingUserId)).Returns(fakeUserDto);
-            var controller = new UserController(fakeUserService);
 
             // Act
-            var result = await controller.GetUserByIdAsync(existingUserId);
+            var result = await fakeUserController.GetUserByIdAsync(existingUserId);
 
             // Assert
             var okObjectResult = Assert.IsType<OkObjectResult>(result);
@@ -193,10 +195,9 @@ namespace Cefalo.InfedgeBlog.Api.UnitTests
         {
             // Arrange
             A.CallTo(() => fakeUserService.PostUserAsync(fakeUserPostDto)).Returns((UserDto)null!);
-            var controller = new UserController(fakeUserService);
 
             // Act
-            var result = await controller.PostUserAsync(fakeUserPostDto);
+            var result = await fakeUserController.PostUserAsync(fakeUserPostDto);
 
             // Assert
             var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);
@@ -228,10 +229,9 @@ namespace Cefalo.InfedgeBlog.Api.UnitTests
             var updatedUserDtoFromService = new UserDto { Id = existingUserId, Name = "Ahmed Shoaib"};
             
             A.CallTo(() => fakeUserService.UpdateUserByIdAsync(existingUserId, fakeUserUpdateDto)).Returns(updatedUserDtoFromService);
-            var controller = new UserController(fakeUserService);
 
             // Act
-            var result = await controller.UpdateUserByIdAsync(existingUserId, fakeUserUpdateDto);
+            var result = await fakeUserController.UpdateUserByIdAsync(existingUserId, fakeUserUpdateDto);
 
             // Assert
             var okResult = Assert.IsType<OkObjectResult>(result);
@@ -264,10 +264,9 @@ namespace Cefalo.InfedgeBlog.Api.UnitTests
             var invalidUserUpdateDto = new UserUpdateDto { Name = "Ahmed Shoaib", Password = "abcd1234" };
 
             A.CallTo(() => fakeUserService.UpdateUserByIdAsync(existingUserId, invalidUserUpdateDto)).Returns((UserDto)null!);
-            var controller = new UserController(fakeUserService);
 
             // Act
-            var result = await controller.UpdateUserByIdAsync(existingUserId, invalidUserUpdateDto);
+            var result = await fakeUserController.UpdateUserByIdAsync(existingUserId, invalidUserUpdateDto);
 
             // Assert
             var badRequestResult = Assert.IsType<BadRequestObjectResult>(result);

@@ -5,6 +5,7 @@ using Cefalo.InfedgeBlog.Service.Interfaces;
 using FakeItEasy;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Xunit;
 
 namespace Cefalo.InfedgeBlog.Api.UnitTests
@@ -18,17 +19,20 @@ namespace Cefalo.InfedgeBlog.Api.UnitTests
         private readonly SignupDto fakeSignupDto;
         private readonly LoginDto fakeLoginDto;
         private readonly UserWithTokenDto fakeUserWithTokenDto;
-        
+        private readonly ILogger<AuthController> fakeLogger;
+
         public AuthControllerUnitTests()
         {
             fakeAuthService = A.Fake<IAuthService>();
-            fakeAuthController = new AuthController(fakeAuthService);
             fakeUserData = A.Fake<FakeUserData>();
             fakeUserDto = fakeUserData.fakeUserDto;
             fakeSignupDto = fakeUserData.fakeSignupDto;
             fakeLoginDto = fakeUserData.fakeLoginDto;
             fakeUserWithTokenDto = fakeUserData.fakeUserWithTokenDto;
+            fakeLogger = A.Fake<ILogger<AuthController>>();
+            fakeAuthController = new AuthController(fakeAuthService, fakeLogger);
         }
+
         #region SignupAsync
         [Fact]
         public async void SignupAsync_WithValidParameter_SignupAsyncIsCalledOnce()
@@ -42,6 +46,7 @@ namespace Cefalo.InfedgeBlog.Api.UnitTests
             // Assert
             A.CallTo(() => fakeAuthService.SignupAsync(fakeSignupDto)).MustHaveHappenedOnceExactly();
         }
+
         [Fact]
         public async void SignupAsync_WithValidParameter_ReturnsCreatedUserCorrectly()
         {
@@ -57,6 +62,7 @@ namespace Cefalo.InfedgeBlog.Api.UnitTests
             createdResult.Value.Should().BeEquivalentTo(fakeUserDto);
             createdResult.StatusCode.Should().Be(201);
         }
+
         [Fact]
         public async void SignupAsync_WithInvalidParameter_ReturnsBadRequest()
         {
@@ -75,6 +81,7 @@ namespace Cefalo.InfedgeBlog.Api.UnitTests
         #endregion
 
         #region LoginAsync
+
         [Fact]
         public async void LoginAsync_WithValidParameter_LoginAsyncIsCalledOnce()
         {
@@ -87,6 +94,7 @@ namespace Cefalo.InfedgeBlog.Api.UnitTests
             // Assert
             A.CallTo(() => fakeAuthService.LoginAsync(fakeLoginDto)).MustHaveHappenedOnceExactly();
         }
+
         [Fact]
         public async void LoginAsync_WithValidParameter_ReturnsLoggedinUserCorrectly()
         {
@@ -102,6 +110,7 @@ namespace Cefalo.InfedgeBlog.Api.UnitTests
             createdResult.Value.Should().BeEquivalentTo(fakeUserWithTokenDto);
             createdResult.StatusCode.Should().Be(200);
         }
+
         [Fact]
         public async void LoginAsync_WithInvalidParameter_ReturnsBadRequest()
         {
@@ -117,6 +126,7 @@ namespace Cefalo.InfedgeBlog.Api.UnitTests
             badRequestResult.Value.Should().Be("Can not login.");
             badRequestResult.StatusCode.Should().Be(400);
         }
+
         #endregion
     }
 }

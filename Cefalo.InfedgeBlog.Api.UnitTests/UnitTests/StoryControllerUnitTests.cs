@@ -9,6 +9,7 @@ using FakeItEasy;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Xunit;
 
 namespace Cefalo.InfedgeBlog.Api.UnitTests
@@ -23,11 +24,11 @@ namespace Cefalo.InfedgeBlog.Api.UnitTests
         private readonly StoryPostDto fakeStoryPostDto;
         private readonly StoryUpdateDto fakeStoryUpdateDto;
         private readonly PaginationFilter fakePaginationFilter;
+        private readonly ILogger<StoryController> fakeLogger;
 
         public StoryControllerUnitTests()
         {
             fakeStoryService = A.Fake<IStoryService>();
-            fakeStoryController = new StoryController(fakeStoryService);
             fakeStoryData = new FakeStoryData();
             fakeStoryDto = fakeStoryData.fakeStoryDto;
             fakeStoryDtoList = fakeStoryData.fakeStoryDtoList;
@@ -38,6 +39,8 @@ namespace Cefalo.InfedgeBlog.Api.UnitTests
                 PageNumber = 1,
                 PageSize = 10
             };
+            fakeLogger = A.Fake<ILogger<StoryController>>();
+            fakeStoryController = new StoryController(fakeStoryService, fakeLogger);
         }
 
         #region GetStoriesAsync
