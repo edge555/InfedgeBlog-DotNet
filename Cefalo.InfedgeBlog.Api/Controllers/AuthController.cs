@@ -9,10 +9,8 @@ namespace Cefalo.InfedgeBlog.Api.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IAuthService _authService;
-        private readonly IUserService _userService;
-        public AuthController(IUserService userService, IAuthService authService)
+        public AuthController(IAuthService authService)
         {
-            _userService = userService;
             _authService = authService;
         }
         [HttpPost]
@@ -22,7 +20,7 @@ namespace Cefalo.InfedgeBlog.Api.Controllers
             var userDto = await _authService.SignupAsync(request);
             if(userDto == null) 
             {
-                return BadRequest("Can not signup");
+                return BadRequest("Can not signup.");
             }
             return Created(nameof(SignupAsync), userDto);
         }
@@ -33,7 +31,7 @@ namespace Cefalo.InfedgeBlog.Api.Controllers
             var userWithToken = await _authService.LoginAsync(request);
             if (userWithToken == null)
             {
-                return BadRequest("Can not login");
+                return BadRequest("Can not login.");
             }
             return Ok(userWithToken);
         }

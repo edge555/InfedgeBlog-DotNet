@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Cefalo.InfedgeBlog.Database.Model;
-using Cefalo.InfedgeBlog.Database.Models;
 using Cefalo.InfedgeBlog.Repository.Interfaces;
 using Cefalo.InfedgeBlog.Service.CustomExceptions;
 using Cefalo.InfedgeBlog.Service.Dtos;
@@ -18,7 +17,7 @@ namespace Cefalo.InfedgeBlog.Service.Services
         private readonly IDateTimeHandler _dateTimeHandler;
         private readonly DtoValidatorBase<StoryPostDto> _storyPostDtoValidator;
         private readonly DtoValidatorBase<StoryUpdateDto> _storyUpdateDtoValidator;
-        public StoryService(IStoryRepository storyRepository, IUserService userService, IMapper mapper, IAuthService authService, IJwtTokenHandler jwtTokenHandler, IDateTimeHandler dateTimeHandler, DtoValidatorBase<StoryPostDto> storyPostDtoValidator, DtoValidatorBase<StoryUpdateDto> storyUpdateDtoValidator)
+        public StoryService(IStoryRepository storyRepository, IUserService userService, IMapper mapper, IJwtTokenHandler jwtTokenHandler, IDateTimeHandler dateTimeHandler, DtoValidatorBase<StoryPostDto> storyPostDtoValidator, DtoValidatorBase<StoryUpdateDto> storyUpdateDtoValidator)
         {
             _storyRepository = storyRepository;
             _userService = userService;
@@ -28,6 +27,7 @@ namespace Cefalo.InfedgeBlog.Service.Services
             _storyPostDtoValidator = storyPostDtoValidator;
             _storyUpdateDtoValidator = storyUpdateDtoValidator;
         }
+
         public async Task<IEnumerable<StoryDto>> GetStoriesAsync(int pageNumber, int pageSize)
         {
             List<Story> stories = await _storyRepository.GetStoriesAsync(pageNumber, pageSize);
@@ -60,7 +60,7 @@ namespace Cefalo.InfedgeBlog.Service.Services
             var storyDto = _mapper.Map<StoryDto>(newStory);
             return storyDto;
         }
-        public async Task<StoryDto> UpdateStoryAsync(int Id, StoryUpdateDto storyUpdateDto)
+        public async Task<StoryDto> UpdateStoryByIdAsync(int Id, StoryUpdateDto storyUpdateDto)
         {
             _storyUpdateDtoValidator.ValidateDto(storyUpdateDto);
             if (_jwtTokenHandler.IsTokenExpired())
@@ -79,7 +79,7 @@ namespace Cefalo.InfedgeBlog.Service.Services
             }
             Story storyData = _mapper.Map<Story>(storyUpdateDto);
             storyData.UpdatedAt = _dateTimeHandler.GetCurrentUtcTime();
-            var updatedStory = await _storyRepository.UpdateStoryAsync(Id, storyData);
+            var updatedStory = await _storyRepository.UpdateStoryByIdAsync(Id, storyData);
             var storyDto = _mapper.Map<StoryDto>(updatedStory);
             return storyDto;
         }

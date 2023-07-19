@@ -1,4 +1,5 @@
-﻿using Cefalo.InfedgeBlog.Database.Models;
+﻿using Cefalo.InfedgeBlog.Api.Utils.Pagination.Filter;
+using Cefalo.InfedgeBlog.Api.Utils.Pagination.Helpers;
 using Cefalo.InfedgeBlog.Service.Dtos;
 using Cefalo.InfedgeBlog.Service.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -11,20 +12,30 @@ namespace Cefalo.InfedgeBlog.Api.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
-        public UserController(IUserService userService, IAuthService authService)
+        public UserController(IUserService userService)
         {
             _userService = userService;
         }
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<User>>> GetUsersAsync()
+        public async Task<ActionResult<IEnumerable<UserDto>>> GetUsersAsync([FromQuery] PaginationFilter filter)
         {
-            return Ok(await _userService.GetUsersAsync());
+            var validFilter = new PaginationFilter(filter.PageNumber, filter.PageSize);
+
+            var pagedData = await _userService.GetUsersAsync(validFilter.PageNumber, validFilter.PageSize);
+            var pagedDataList = pagedData.ToList();
+            var totalRecords = await _userService.CountUsersAsync();
+            var pagedReponse = PaginationHelper.CreatePagedReponse<UserDto>(pagedDataList, validFilter, totalRecords);
+            return Ok(pagedReponse);
         }
         [HttpGet("{Id}")]
-        public async Task<IActionResult> GetUser(int Id)
+        public async Task<IActionResult> GetUserByIdAsync(int Id)
         {
-            var user = await _userService.GetUserByIdAsync(Id);
-            return Ok(user);
+            var userDto = await _userService.GetUserByIdAsync(Id);
+            if (userDto == null)
+            {
+                return BadRequest("User not found.");
+            }
+            return Ok(userDto);
         }
         [HttpPost, Authorize]
         public async Task<IActionResult> PostUserAsync([FromBody] UserPostDto userPostDto)
@@ -32,7 +43,7 @@ namespace Cefalo.InfedgeBlog.Api.Controllers
             var userDto = await _userService.PostUserAsync(userPostDto);
             if(userDto== null) 
             {
-                return BadRequest("Can not create user");
+                return BadRequest("Can not create user.");
             }
             return Created("", userDto);
         }
@@ -42,7 +53,7 @@ namespace Cefalo.InfedgeBlog.Api.Controllers
             var userDto = await _userService.UpdateUserByIdAsync(Id, userUpdateDto);
             if (userDto == null)
             {
-                return BadRequest("Can not update user");
+                return BadRequest("Can not update user.");
             }
             return Ok(userDto);
         }
@@ -52,7 +63,7 @@ namespace Cefalo.InfedgeBlog.Api.Controllers
             var deleted = await _userService.DeleteUserByIdAsync(Id);
             if (!deleted) 
             { 
-                return BadRequest("Can not delete user"); 
+                return BadRequest("Can not delete user."); 
             }
             return NoContent();
         }

@@ -3,13 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33712.159
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cefalo.InfedgeBlog.Api", "Cefalo.InfedgeBlog.Api.csproj", "{9B0A8FD7-B5F5-4332-BBC2-C2F19E4F794F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cefalo.InfedgeBlog.Api", "Cefalo.InfedgeBlog.Api.csproj", "{9B0A8FD7-B5F5-4332-BBC2-C2F19E4F794F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cefalo.InfedgeBlog.Service", "..\Cefalo.InfedgeBlog.Service\Cefalo.InfedgeBlog.Service.csproj", "{556FEBF7-782D-4995-AFAD-E28C4457BEF4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cefalo.InfedgeBlog.Service", "..\Cefalo.InfedgeBlog.Service\Cefalo.InfedgeBlog.Service.csproj", "{556FEBF7-782D-4995-AFAD-E28C4457BEF4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cefalo.InfedgeBlog.Database", "..\Cefalo.InfedgeBlog.Database\Cefalo.InfedgeBlog.Database.csproj", "{251BB2E7-5EC4-47C1-8E11-669DA7A32C26}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cefalo.InfedgeBlog.Database", "..\Cefalo.InfedgeBlog.Database\Cefalo.InfedgeBlog.Database.csproj", "{251BB2E7-5EC4-47C1-8E11-669DA7A32C26}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cefalo.InfedgeBlog.Repository", "..\Cefalo.InfedgeBlog.Repository\Cefalo.InfedgeBlog.Repository.csproj", "{19698D92-7515-4897-ABA6-487486D24FB4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cefalo.InfedgeBlog.Repository", "..\Cefalo.InfedgeBlog.Repository\Cefalo.InfedgeBlog.Repository.csproj", "{19698D92-7515-4897-ABA6-487486D24FB4}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cefalo.InfedgeBlog.Api.UnitTests", "..\Cefalo.InfedgeBlog.Api.UnitTests\Cefalo.InfedgeBlog.Api.UnitTests.csproj", "{509397B9-40A2-444D-B0E9-42CD9A5CF3EE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Cefalo.InfedgeBlog.Service.UnitTests", "..\Cefalo.InfedgeBlog.Service.UnitTests\Cefalo.InfedgeBlog.Service.UnitTests.csproj", "{E5E7D33B-D2B1-49B2-8BA2-CC4051347461}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cefalo.InfedgeBlog.Repository.UnitTests", "..\Cefalo.InfedgeBlog.Repository.UnitTests\Cefalo.InfedgeBlog.Repository.UnitTests.csproj", "{81F0D746-7FB5-4EAA-BBFC-D2FB36326ADA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +39,18 @@ Global
 		{19698D92-7515-4897-ABA6-487486D24FB4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{19698D92-7515-4897-ABA6-487486D24FB4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{19698D92-7515-4897-ABA6-487486D24FB4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{509397B9-40A2-444D-B0E9-42CD9A5CF3EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{509397B9-40A2-444D-B0E9-42CD9A5CF3EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{509397B9-40A2-444D-B0E9-42CD9A5CF3EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{509397B9-40A2-444D-B0E9-42CD9A5CF3EE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E5E7D33B-D2B1-49B2-8BA2-CC4051347461}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E5E7D33B-D2B1-49B2-8BA2-CC4051347461}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E5E7D33B-D2B1-49B2-8BA2-CC4051347461}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E5E7D33B-D2B1-49B2-8BA2-CC4051347461}.Release|Any CPU.Build.0 = Release|Any CPU
+		{81F0D746-7FB5-4EAA-BBFC-D2FB36326ADA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{81F0D746-7FB5-4EAA-BBFC-D2FB36326ADA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{81F0D746-7FB5-4EAA-BBFC-D2FB36326ADA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{81F0D746-7FB5-4EAA-BBFC-D2FB36326ADA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

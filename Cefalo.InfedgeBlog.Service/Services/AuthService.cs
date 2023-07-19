@@ -14,14 +14,16 @@ namespace Cefalo.InfedgeBlog.Service.Services
         private readonly IMapper _mapper;
         private readonly IJwtTokenHandler _jwtTokenHandler;
         private readonly IDateTimeHandler _dateTimeHandler;
+        private readonly IPasswordHandler _passwordHandler;
         private readonly DtoValidatorBase<SignupDto> _signupDtoValidator;
         private readonly DtoValidatorBase<LoginDto> _loginDtoValidator;
-        public AuthService(IUserRepository userRepository, IMapper mapper, IJwtTokenHandler jwtTokenHandler, IDateTimeHandler dateTimeHandler, DtoValidatorBase<SignupDto> signupDtoValidator, DtoValidatorBase<LoginDto> loginDtoValidator)
+        public AuthService(IUserRepository userRepository, IMapper mapper, IJwtTokenHandler jwtTokenHandler, IDateTimeHandler dateTimeHandler, IPasswordHandler passwordHandler, DtoValidatorBase<SignupDto> signupDtoValidator, DtoValidatorBase<LoginDto> loginDtoValidator)
         {
             _userRepository = userRepository;
             _mapper = mapper;
             _jwtTokenHandler = jwtTokenHandler;
             _dateTimeHandler = dateTimeHandler;
+            _passwordHandler = passwordHandler;
             _signupDtoValidator = signupDtoValidator;
             _loginDtoValidator = loginDtoValidator;
         }
@@ -39,7 +41,7 @@ namespace Cefalo.InfedgeBlog.Service.Services
                 throw new BadRequestException("User already exists with this email");
             }
             var user = _mapper.Map<User>(request);
-            string hashedPassword = BCrypt.Net.BCrypt.HashPassword(request.Password);
+            string hashedPassword = _passwordHandler.HashPassword(request.Password);
             user.Password = hashedPassword;
             user.CreatedAt = _dateTimeHandler.GetCurrentUtcTime();
             user.UpdatedAt = _dateTimeHandler.GetCurrentUtcTime();
@@ -60,7 +62,7 @@ namespace Cefalo.InfedgeBlog.Service.Services
             {
                 throw new BadRequestException("No user exists with this username");
             }
-            if (!BCrypt.Net.BCrypt.Verify(request.Password, userByUsername.Password))
+            if (!_passwordHandler.Verify(request.Password, userByUsername.Password))
             {
                 throw new BadRequestException("Password does not match");
             }
