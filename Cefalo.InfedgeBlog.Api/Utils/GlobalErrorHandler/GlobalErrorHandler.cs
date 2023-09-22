@@ -31,7 +31,7 @@ namespace Cefalo.InfedgeBlog.Api.Utils.GlobalErrorHandler
                         await context.Response.WriteAsync(new ErrorDetails()
                         {
                             StatusCode = context.Response.StatusCode,
-                            Message = "An error occured. Please try again.",
+                            Message = "An error occurred. Please try again.",
                         }.ToString());
                     }
                 });

@@ -29,10 +29,10 @@ namespace Cefalo.InfedgeBlog.Api.Controllers
             var pagedData = await _storyService.GetStoriesAsync(validFilter.PageNumber, validFilter.PageSize);
             var pagedDataList = pagedData.ToList();
             var totalRecords = await _storyService.CountStoriesAsync();
-            var pagedReponse = PaginationHelper.CreatePagedReponse<StoryDto>(pagedDataList, validFilter, totalRecords);
+            var pagedResponse = PaginationHelper.CreatePagedReponse<StoryDto>(pagedDataList, validFilter, totalRecords);
 
             _logger.LogInformation("Retrieved stories successfully");
-            return Ok(pagedReponse);
+            return Ok(pagedResponse);
         }
 
         [HttpGet("{Id}")]

@@ -9,7 +9,9 @@ namespace Cefalo.InfedgeBlog.Service.Utils
     {
         public AutoMapperProfiles()
         {
-            CreateMap<Story, StoryDto>().ReverseMap();
+            CreateMap<Story, StoryDto>()
+                .ForMember(dest => dest.PublishedDate, opt => opt.MapFrom(src => src.CreatedAt))
+                .ReverseMap();
             CreateMap<StoryPostDto, Story>();
             CreateMap<StoryUpdateDto, Story>();
 

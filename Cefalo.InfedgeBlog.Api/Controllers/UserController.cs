@@ -29,10 +29,10 @@ namespace Cefalo.InfedgeBlog.Api.Controllers
             var pagedData = await _userService.GetUsersAsync(validFilter.PageNumber, validFilter.PageSize);
             var pagedDataList = pagedData.ToList();
             var totalRecords = await _userService.CountUsersAsync();
-            var pagedReponse = PaginationHelper.CreatePagedReponse<UserDto>(pagedDataList, validFilter, totalRecords);
+            var pagedResponse = PaginationHelper.CreatePagedReponse<UserDto>(pagedDataList, validFilter, totalRecords);
 
             _logger.LogInformation("Retrieved users successfully");
-            return Ok(pagedReponse);
+            return Ok(pagedResponse);
         }
 
         [HttpGet("{Id}")]

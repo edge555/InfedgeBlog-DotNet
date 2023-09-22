@@ -71,9 +71,5 @@ namespace Cefalo.InfedgeBlog.Service.Services
             userData.Token = token;
             return userData;
         }
-        public void LogoutAsync()
-        {
-            _jwtTokenHandler.DeleteToken();
-        }
     }
 }
